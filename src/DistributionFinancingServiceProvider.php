@@ -13,7 +13,8 @@ final class DistributionFinancingServiceProvider extends PackageServiceProvider
     {
         $package->name('distribution-financings')
             ->hasConfigFile('financing')
-            ->hasRoute('api');
+            ->hasRoute('api')
+            ->hasMigration('create_distribution_financings_table');
     }
 
     public function registeringPackage() : void
