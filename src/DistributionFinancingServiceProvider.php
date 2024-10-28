@@ -12,7 +12,8 @@ final class DistributionFinancingServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package->name('distribution-financings')
-            ->hasConfigFile('financing');
+            ->hasConfigFile('financing')
+            ->hasRoute('api');
     }
 
     public function registeringPackage() : void
