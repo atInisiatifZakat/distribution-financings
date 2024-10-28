@@ -14,4 +14,12 @@ final class DistributionFinancingServiceProvider extends PackageServiceProvider
         $package->name('distribution-financings')
             ->hasConfigFile('financing');
     }
+
+    public function registeringPackage() : void
+    {
+        if ($this->app->runningUnitTests() && $this->app->runningInConsole()) {
+            $this->loadMigrationsFrom('../../migrations');
+            $this->loadMigrationsFrom('../../migrations/testing');
+        }
+    }
 }
