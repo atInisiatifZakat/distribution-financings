@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace VendorName\Skeleton\Tests;
+namespace Inisiatif\Distribution\Financings\Tests;
 
-final class SkeletonTest extends TestCase
+final class FinancingTest extends TestCase
 {
     public function test_example(): void
     {

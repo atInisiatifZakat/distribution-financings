@@ -1,14 +1,14 @@
 blank_issues_enabled: false
 contact_links:
   - name: Ask a question
-    url: https://github.com/:vendor_slug/:package_name/discussions/new?category=q-a
+    url: https://github.com/atInisiatifZakat/distribution-financings/discussions/new?category=q-a
     about: Ask the community for help
   - name: Request a feature
-    url: https://github.com/:vendor_slug/:package_name/discussions/new?category=ideas
+    url: https://github.com/atInisiatifZakat/distribution-financings/discussions/new?category=ideas
     about: Share ideas for new features
   - name: Report a security issue
-    url: https://github.com/:vendor_slug/:package_name/security/policy
+    url: https://github.com/atInisiatifZakat/distribution-financings/security/policy
     about: Learn how to notify us for sensitive bugs
   - name: Report a bug
-    url: https://github.com/:vendor_slug/:package_name/issues/new
+    url: https://github.com/atInisiatifZakat/distribution-financings/issues/new
     about: Report a reproducible bug

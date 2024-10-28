@@ -1,56 +1,55 @@
 {
-    "name": ":vendor_name/:package_slug",
-    "description": ":package_description",
+    "name": "inisiatif/distribution-financings",
+    "description": "Share package for distribution financing",
     "keywords": [
         "php",
         "laravel",
         "laravel-package"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/atInisiatifZakat/distribution-financings",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Annisa Nadia N",
+            "email": "annisa.nadia@izi.or.id",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.2",
-        "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0"
+        "illuminate/contracts": "^9.52|^10.0",
+        "inisiatif/common": "^2.1",
+        "inisiatif/model-shared": "^2.5",
+        "inisiatif/user": "^3.3",
+        "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "laravel/pint": "~1.17.1",
-        "orchestra/testbench": "^8.0",
-        "vimeo/psalm": "^5.0"
+        "orchestra/testbench": "^8.0"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Inisiatif\\Distribution\\Financings\\": "src",
+            "Inisiatif\\Distribution\\Financings\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Inisiatif\\Distribution\\Financings\\Financing\\Tests\\": "tests"
         }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-        "analyse": "vendor/bin/psalm",
         "test": "vendor/bin/phpunit",
         "format": "vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-        }
+        "sort-packages": true
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Inisiatif\\Distribution\\Financings\\DistributionFinancingServiceProvider"
             ]
         }
     },
