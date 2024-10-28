@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.1",
         "illuminate/contracts": "^9.52|^10.0",
         "inisiatif/common": "^2.1",
         "inisiatif/model-shared": "^2.5",
