@@ -7,21 +7,9 @@ use Inisiatif\Distribution\Financings\Http\Controllers;
 
 return static function (Router $router): void {
     $router->middleware('auth:sanctum')->group(function (Router $router): void {
-        $router->group([
-            'prefix' => 'distribution',
-        ], static function (Router $router): void {
-            $router->group([
-                'prefix' => 'project',
-            ], static function (Router $router): void {
-                $router->group([
-                    'prefix' => 'financing',
-                ], static function (Router $router): void {
-                    $router->post('/', [Controllers\FinancingController::class, 'store']);
+        $router->post('/distribution/project/financing', [Controllers\FinancingController::class, 'store']);
 
-                    $router->get('donation', [Controllers\FinancingController::class, 'index']);
-                    $router->delete('/{financing}', [Controllers\FinancingController::class, 'delete']);
-                });
-            });
-        });
+        $router->get('/distribution/project/financing/donation', [Controllers\FinancingController::class, 'index']);
+        $router->delete('/distribution/project/financing/{financing}', [Controllers\FinancingController::class, 'delete']);
     });
 };
