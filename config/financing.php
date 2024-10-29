@@ -31,5 +31,5 @@ return [
         'donation' => \Inisiatif\Distribution\Financings\Models\Donation::class,
 
         'distribution' => \Inisiatif\Distribution\Financings\Models\Distribution::class,
-    ]
+    ],
 ];

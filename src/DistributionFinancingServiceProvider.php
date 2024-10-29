@@ -17,7 +17,7 @@ final class DistributionFinancingServiceProvider extends PackageServiceProvider
             ->hasMigration('create_distribution_financings_table');
     }
 
-    public function registeringPackage() : void
+    public function registeringPackage(): void
     {
         if ($this->app->runningUnitTests() && $this->app->runningInConsole()) {
             $this->loadMigrationsFrom('../../migrations');
