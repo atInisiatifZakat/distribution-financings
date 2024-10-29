@@ -21,6 +21,7 @@
         "inisiatif/common": "^2.1",
         "inisiatif/model-shared": "^2.5",
         "inisiatif/user": "^3.3",
+        "spatie/data-transfer-object": "^3.9",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
@@ -35,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Inisiatif\\Distribution\\Financings\\Financing\\Tests\\": "tests"
+            "Inisiatif\\Distribution\\Financings\\Tests\\": "tests"
         }
     },
     "scripts": {
