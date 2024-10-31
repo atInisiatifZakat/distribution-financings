@@ -9,9 +9,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Illuminate\Database\Eloquent\Builder;
-use Inisiatif\Distribution\Financings\Filters\DateIntervalFilter;
 use Inisiatif\Distribution\Financings\Models\Financing;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
+use Inisiatif\Distribution\Financings\Filters\DateIntervalFilter;
 
 final class FinancingRepository extends AbstractRepository
 {
