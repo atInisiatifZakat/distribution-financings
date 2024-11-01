@@ -10,6 +10,7 @@ use Inisiatif\Distribution\Financings\Models\Donation;
 use Inisiatif\Distribution\Financings\Models\Financing;
 use Inisiatif\Distribution\Financings\Models\Distribution;
 use Inisiatif\Distribution\Financings\Actions\CreateFinancingAction;
+use Inisiatif\Distribution\Financings\Actions\DeleteFinancingAction;
 use Inisiatif\Distribution\Financings\Http\Resources\FinancingResource;
 use Inisiatif\Distribution\Financings\Repositories\FinancingRepository;
 use Inisiatif\Distribution\Financings\DataTransfers\CreateFinancingData;
@@ -62,13 +63,26 @@ final class FinancingController
         ]);
     }
 
-    public function delete(string $financingId): JsonResource
+    public function delete(string $financingId, DeleteFinancingAction $action): JsonResource
     {
-        Financing::query()->where('id', '=', $financingId)->delete();
+        $financing = Financing::query()->find($financingId);
+
+        $donation = Donation::query()->find($financing->getAttribute('donation_id'));
+
+        if ($financing === null || $donation === null) {
+            throw ValidationException::withMessages(($financing === null) ? [
+                'financing_id' => 'Financing doesn`t exists',
+            ] : [
+                'donation_id' => 'Fination doesn`t exists',
+            ]);
+        }
+
+        $action->handle($financing, $donation);
 
         return JsonResource::make([
             'status' => 'success',
             'message' => 'Hapus donasi dari data financial berhasil',
         ]);
+
     }
 }
