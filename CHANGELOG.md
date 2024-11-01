@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.2.2 - 2024-11-01
+
+### What's Changed
+
+* Refund donation amount while deleting financing by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/7
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.2.1...1.2.2
+
 ## 1.2.1 - 2024-11-01
 
 ### What's Changed
