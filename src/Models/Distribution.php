@@ -45,9 +45,9 @@ final class Distribution extends Model implements ResourceInterface
         return $this->belongsTo(config('financing.model.program', Program::class));
     }
 
-    public function sector(): BelongsTo
+    public function program_sector(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.sector', ProgramSector::class));
+        return $this->belongsTo(config('financing.model.program_sector', ProgramSector::class));
     }
 
     public function getId(): ?string

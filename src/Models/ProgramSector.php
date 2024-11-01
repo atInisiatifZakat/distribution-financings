@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
 final class ProgramSector extends Model implements ResourceInterface
 {
-    use HasUuids;
-
     protected $guarded = [];
 
     protected $casts = [

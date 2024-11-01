@@ -34,6 +34,6 @@ return [
 
         'program' => \Inisiatif\Distribution\Financings\Models\Program::class,
 
-        'sector' => \Inisiatif\Distribution\Financings\Models\ProgramSector::class,
+        'program_sector' => \Inisiatif\Distribution\Financings\Models\ProgramSector::class,
     ],
 ];
