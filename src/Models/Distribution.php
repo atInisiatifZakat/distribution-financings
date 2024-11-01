@@ -6,6 +6,7 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
@@ -37,6 +38,16 @@ final class Distribution extends Model implements ResourceInterface
     public function financing(): HasMany
     {
         return $this->hasMany(Financing::class);
+    }
+
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(config('financing.model.program', Program::class));
+    }
+
+    public function sector(): BelongsTo
+    {
+        return $this->belongsTo(config('financing.model.sector', ProgramSector::class));
     }
 
     public function getId(): ?string
