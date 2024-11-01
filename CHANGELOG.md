@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.1.0 - 2024-11-01
+
+### What's Changed
+
+* Update API by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/4
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.0.1...1.1.0
+
 ## 1.0.1 - 2024-10-31
 
 ### What's Changed
