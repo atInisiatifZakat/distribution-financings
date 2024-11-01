@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.2.0 - 2024-11-01
+
+### What's Changed
+
+* Add Program Relation by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/5
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.1.0...1.2.0
+
 ## 1.1.0 - 2024-11-01
 
 ### What's Changed
