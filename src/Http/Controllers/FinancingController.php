@@ -25,7 +25,7 @@ final class FinancingController
     public function store(CreateFinancingRequest $request, CreateFinancingAction $action)
     {
         /** @var Distribution|null $distribution */
-        $distribution = Distribution::query()->find($request->input('distribution_id'))->loadMissing(['program', 'sector']);
+        $distribution = Distribution::query()->find($request->input('distribution_id'))->loadMissing(['program', 'program_sector']);
 
         /** @var Donation|null $donation */
         $donation = Donation::query()->find($request->input('donation_id'));
@@ -49,10 +49,10 @@ final class FinancingController
                 'donation_number' => $donation->getAttribute('identification_number'),
                 'distribution_name' => $distribution->getAttribute('name'),
                 'distribution_at' => $distribution->getAttribute('distribution_at'),
-                'distribution_program_id' => $distribution->getAttribute('program')->getKey(),
-                'distribution_sector_id' => $distribution->getAttribute('sector')->getKey(),
+                'distribution_program_id' => $distribution->getAttribute('program_id'),
+                'distribution_sector_id' => $distribution->getAttribute('program_sector_id'),
                 'distribution_program_name' => $distribution->getAttribute('program')->getAttribute('name'),
-                'distribution_sector_name' => $distribution->getAttribute('sector')->getAttribute('name'),
+                'distribution_sector_name' => $distribution->getAttribute('program_sector')->getAttribute('name'),
             ]))
         );
 
@@ -62,9 +62,9 @@ final class FinancingController
         ]);
     }
 
-    public function delete(Financing $financing): JsonResource
+    public function delete(string $financingId): JsonResource
     {
-        $financing->delete();
+        Financing::query()->where('id', '=', $financingId)->delete();
 
         return JsonResource::make([
             'status' => 'success',

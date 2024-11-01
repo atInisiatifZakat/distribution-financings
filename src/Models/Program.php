@@ -28,9 +28,4 @@ final class Program extends Model implements ResourceInterface
     {
         $this->setAttribute('id', $id);
     }
-
-    public function sector(): BelongsTo
-    {
-        return $this->belongsTo(config('financing.model.sector', ProgramSector::class));
-    }
 }
