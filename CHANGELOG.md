@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.2.1 - 2024-11-01
+
+### What's Changed
+
+* Fix Program Sector Not Found by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/6
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2024-11-01
 
 ### What's Changed
