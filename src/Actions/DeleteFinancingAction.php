@@ -11,7 +11,7 @@ final class DeleteFinancingAction
 {
     public function handle(Financing $financing, Donation $donation): void
     {
-        $donation->calculateAmountRemaining("delete");
+        $donation->calculateAmountRemaining('delete');
 
         $financing->delete();
     }
