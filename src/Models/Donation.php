@@ -65,11 +65,22 @@ final class Donation extends Model implements ResourceInterface
         return $this->belongsTo(app(DonorModelRegistrar::class)->getModelClassName());
     }
 
-    public function checkAmountRemaining(): int|float
+    public function calculateAmountRemaining(?string $action = null): int|float
     {
         $totalFinancingAmount = $this->getAttribute('financing')->sum('amount');
 
-        return $this->getAttribute('total_amount') - $totalFinancingAmount;
+        if($action){
+            $calculate = $this->getAttribute('total_amount') + $totalFinancingAmount;
+        }else{
+            $calculate = $this->getAttribute('total_amount') - $totalFinancingAmount;
+        }
+
+        return $calculate;
+    }
+
+    public function checkAmountRemaining(): int|float
+    {
+        return $this->calculateAmountRemaining();
     }
 
     public function amountRemaining(): Attribute
