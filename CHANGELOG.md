@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.2.3 - 2024-11-05
+
+### What's Changed
+
+* PDG-863 - Fixing Calculate Amount Remaining by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/8
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.2.2...1.2.3
+
 ## 1.2.2 - 2024-11-01
 
 ### What's Changed
