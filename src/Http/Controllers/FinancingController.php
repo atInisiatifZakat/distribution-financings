@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inisiatif\Distribution\Financings\Models\Donation;
@@ -18,9 +19,9 @@ use Inisiatif\Distribution\Financings\Http\Requests\CreateFinancingRequest;
 
 final class FinancingController
 {
-    public function index(string $distributionId, FinancingRepository $repository): JsonResource
+    public function index(string $distributionId, Request $request, FinancingRepository $repository): JsonResource
     {
-        return FinancingResource::collection($repository->fetchUsingDistribution($distributionId));
+        return FinancingResource::collection($repository->fetchUsingDistribution($distributionId, $request));
     }
 
     public function store(CreateFinancingRequest $request, CreateFinancingAction $action)
