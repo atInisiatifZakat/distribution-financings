@@ -42,7 +42,7 @@ final class FinancingController
 
         if ($distribution->isOverRequestAmount($request->integer('amount'))) {
             throw ValidationException::withMessages([
-                'amount' => 'Amount must be the same as distribution amount',
+                'amount' => 'Over amount requested',
             ]);
         }
 
