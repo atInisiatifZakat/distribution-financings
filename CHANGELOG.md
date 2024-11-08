@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.2.4 - 2024-11-08
+
+### What's Changed
+
+* PDG-969 - Fix List Financing Pagination by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/9
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.2.3...1.2.4
+
 ## 1.2.3 - 2024-11-05
 
 ### What's Changed
