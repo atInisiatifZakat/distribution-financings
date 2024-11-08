@@ -76,7 +76,6 @@ final class Distribution extends Model implements ResourceInterface
 
     public function isOverRequestAmount(float|int $requestAmount): bool
     {
-        return $requestAmount > $this->getAttribute('amount') ||
-        $requestAmount < $this->getAttribute('amount');
+        return ($requestAmount + $this->financing()->sum('amount')) > $this->getAttribute('amount');
     }
 }
