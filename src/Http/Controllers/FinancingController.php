@@ -73,7 +73,7 @@ final class FinancingController
             throw ValidationException::withMessages(($financing === null) ? [
                 'financing_id' => 'Financing doesn`t exists',
             ] : [
-                'donation_id' => 'Fination doesn`t exists',
+                'donation_id' => 'Donation doesn`t exists',
             ]);
         }
 

@@ -29,6 +29,8 @@ final class DonationRepository extends AbstractRepository
             ->join('branches', 'donations.branch_id', '=', 'branches.id')
             ->join('donors', 'donations.donor_id', '=', 'donors.id')
             ->join('employees', 'donations.employee_id', '=', 'employees.id')
+            ->where('branches.id', $request->user()->getLoginable()->getAttribute('branch_id'))
+            ->where('transaction_status', 'VERIFIED')
             ->orderBy('transaction_date', 'desc')
             ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
 
