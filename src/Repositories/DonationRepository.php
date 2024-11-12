@@ -20,19 +20,36 @@ final class DonationRepository extends AbstractRepository
 
     public function fetchAll(Request $request): LengthAwarePaginator
     {
-        $builder = $this->getModel()->newQuery()
-            ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
-                'donors.id AS donor_id', 'donations.identification_number',
-                'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
-                'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
-                'donations.total_amount')
-            ->join('branches', 'donations.branch_id', '=', 'branches.id')
-            ->join('donors', 'donations.donor_id', '=', 'donors.id')
-            ->join('employees', 'donations.employee_id', '=', 'employees.id')
-            ->where('branches.id', $request->user()->getLoginable()->getAttribute('branch_id'))
-            ->where('transaction_status', 'VERIFIED')
-            ->orderBy('transaction_date', 'desc')
-            ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
+        $branch = $request->user()->getLoginable()->getAttribute('branch');
+
+        if($branch && $branch->getAttribute('is_head_office') === false){
+            $builder = $this->getModel()->newQuery()
+                ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
+                    'donors.id AS donor_id', 'donations.identification_number',
+                    'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
+                    'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
+                    'donations.total_amount')
+                ->join('branches', 'donations.branch_id', '=', 'branches.id')
+                ->join('donors', 'donations.donor_id', '=', 'donors.id')
+                ->join('employees', 'donations.employee_id', '=', 'employees.id')
+                ->where('donations.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
+                ->where('transaction_status', 'VERIFIED')
+                ->orderBy('transaction_date', 'desc')
+                ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
+        }else if($branch && $branch->getAttribute('is_head_office') === true){
+            $builder = $this->getModel()->newQuery()
+                ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
+                    'donors.id AS donor_id', 'donations.identification_number',
+                    'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
+                    'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
+                    'donations.total_amount')
+                ->join('branches', 'donations.branch_id', '=', 'branches.id')
+                ->join('donors', 'donations.donor_id', '=', 'donors.id')
+                ->join('employees', 'donations.employee_id', '=', 'employees.id')
+                ->where('transaction_status', 'VERIFIED')
+                ->orderBy('transaction_date', 'desc')
+                ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
+        }
 
         return $this->queryBuilder($builder, $request)
             ->paginate($request->integer('limit', 5))
