@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.3.0 - 2024-11-12
+
+### What's Changed
+
+* PDG-869 - Update DonationRepository.php by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/10
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.2.4...1.3.0
+
 ## 1.2.4 - 2024-11-08
 
 ### What's Changed
