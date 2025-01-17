@@ -25,7 +25,7 @@ final class DonationRepository extends AbstractRepository
         if($branch && $branch->getAttribute('is_head_office') === false){
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
-                    'donors.id AS donor_id', 'donations.identification_number', 'donations.type',
+                    'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
                     'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
@@ -62,6 +62,7 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('branch', 'branch_id'),
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
+            AllowedFilter::exact('donation_type', 'donation_type'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
