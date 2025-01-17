@@ -2,6 +2,15 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.3.1 - 2025-01-17
+
+### What's Changed
+
+* Add column type to donations table by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/11
+* Adjustment Donation List Filter by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/12
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.3.0...1.3.1
+
 ## 1.3.0 - 2024-11-12
 
 ### What's Changed
