@@ -11,14 +11,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('donations', function (Blueprint $table): void {
-            $table->string('type')->nullable();
+            $table->string('donation_type')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('donations', function (Blueprint $table): void {
-            $table->dropColumn(['type']);
+            $table->dropColumn(['donation_type']);
         });
     }
 };
