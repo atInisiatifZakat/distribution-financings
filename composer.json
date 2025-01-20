@@ -21,6 +21,7 @@
         "inisiatif/common": "^2.1",
         "inisiatif/model-shared": "^2.5",
         "inisiatif/user": "^3.3",
+        "openspout/openspout": "^4.25",
         "spatie/data-transfer-object": "^3.9",
         "spatie/laravel-package-tools": "^1.16"
     },
