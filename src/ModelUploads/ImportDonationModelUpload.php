@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Inisiatif\Distribution\Financings\ModelUpload;
+namespace Inisiatif\Distribution\Financings\ModelUploads;
 
 use FromHome\ModelUpload\AbstractModelRecordImport;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
