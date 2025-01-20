@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\Distribution\Financings\Jobs;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +27,12 @@ final class ImportDonationJob implements ShouldQueue
 
     private string $fileName;
 
-    public function __construct(string $fileName)
+    private string $filePath;
+
+    public function __construct(string $fileName, string $filePath)
     {
         $this->fileName = $fileName;
+        $this->filePath = $filePath;
     }
 
     public function handle(): void
@@ -36,7 +40,7 @@ final class ImportDonationJob implements ShouldQueue
         $option = new Options;
         $option->FIELD_DELIMITER = ';';
         $reader = new Reader($option);
-        $reader->open(Storage::disk('temps')->path($this->fileName));
+        $reader->open($this->getUrlAttribute($this->filePath));
 
         foreach ($reader->getSheetIterator() as $sheet) {
             $spoutHelper = new SpoutHelper($sheet, 1);
@@ -80,5 +84,13 @@ final class ImportDonationJob implements ShouldQueue
         $dataMapped['donor_id'] = empty($donor) ? null : $donor->getKey();
 
         return $dataMapped;
+    }
+
+    private function getUrlAttribute(string $filePath): string
+    {
+        return Storage::temporaryUrl(
+            $filePath,
+            Carbon::now()->addHour()
+        );
     }
 }

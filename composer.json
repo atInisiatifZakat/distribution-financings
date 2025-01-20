@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "fromhome/laravel-model-upload": "^1.0",
         "illuminate/contracts": "^9.52|^10.0",
         "inisiatif/common": "^2.1",
         "inisiatif/model-shared": "^2.5",
