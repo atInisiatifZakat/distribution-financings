@@ -7,9 +7,9 @@ namespace Inisiatif\Distribution\Financings\ModelUploads;
 use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
+use Inisiatif\Distribution\Financings\Models\Donation;
 use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
 use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
-use Inisiatif\Distribution\Financings\Models\Donation;
 
 final class DonationProcessor implements ModelUploadRecordProcessor
 {
@@ -32,8 +32,8 @@ final class DonationProcessor implements ModelUploadRecordProcessor
         }
 
         $donation = Donation::query()->updateOrCreate([
-            'identification_number' => $record->getMetaData('identification_number')
-        ],[
+            'identification_number' => $record->getMetaData('identification_number'),
+        ], [
             'branch_id' => $record->getMetaData('branch_id'),
             'donor_id' => $record->getMetaData('donor_id'),
             'employee_id' => $record->getMetaData('employee_id'),
@@ -41,7 +41,7 @@ final class DonationProcessor implements ModelUploadRecordProcessor
             'transaction_status' => $record->getMetaData('transaction_status'),
             'amount' => (float) $record->getMetaData('amount'),
             'total_amount' => (float) $record->getMetaData('total_amount'),
-            'donation_type' => $record->getMetaData('donation_type')
+            'donation_type' => $record->getMetaData('donation_type'),
         ]);
 
         $record->update([
