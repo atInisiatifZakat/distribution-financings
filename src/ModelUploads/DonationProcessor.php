@@ -8,9 +8,9 @@ use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
 use Inisiatif\Distribution\Financings\Models\Donation;
+use Inisiatif\Distribution\Financings\Models\Donation;
 use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
 use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
-use Inisiatif\Distribution\Financings\Models\Donation;
 
 final class DonationProcessor implements ModelUploadRecordProcessor
 {
@@ -33,8 +33,8 @@ final class DonationProcessor implements ModelUploadRecordProcessor
         }
 
         $donation = Donation::query()->updateOrCreate([
-            'identification_number' => $record->getPayloadData('identification_number')
-        ],[
+            'identification_number' => $record->getPayloadData('identification_number'),
+        ], [
             'branch_id' => $record->getPayloadData('branch_id'),
             'donor_id' => $record->getPayloadData('donor_id'),
             'employee_id' => $record->getPayloadData('employee_id'),
@@ -42,7 +42,7 @@ final class DonationProcessor implements ModelUploadRecordProcessor
             'transaction_status' => $record->getPayloadData('transaction_status'),
             'amount' => (float) $record->getPayloadData('amount'),
             'total_amount' => (float) $record->getPayloadData('total_amount'),
-            'donation_type' => $record->getPayloadData('donation_type')
+            'donation_type' => $record->getPayloadData('donation_type'),
         ]);
 
         $record->update([
