@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
 use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
 use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
+use Illuminate\Support\Facades\Log;
 use Inisiatif\Distribution\Financings\Models\Donation;
 
 final class DonationProcessor implements ModelUploadRecordProcessor
@@ -32,16 +33,16 @@ final class DonationProcessor implements ModelUploadRecordProcessor
         }
 
         $donation = Donation::query()->updateOrCreate([
-            'identification_number' => $record->getMetaData('identification_number')
+            'identification_number' => $record->getPayloadData('identification_number')
         ],[
-            'branch_id' => $record->getMetaData('branch_id'),
-            'donor_id' => $record->getMetaData('donor_id'),
-            'employee_id' => $record->getMetaData('employee_id'),
-            'transaction_date' => $record->getMetaData('transaction_date'),
-            'transaction_status' => $record->getMetaData('transaction_status'),
-            'amount' => (float) $record->getMetaData('amount'),
-            'total_amount' => (float) $record->getMetaData('total_amount'),
-            'donation_type' => $record->getMetaData('donation_type')
+            'branch_id' => $record->getPayloadData('branch_id'),
+            'donor_id' => $record->getPayloadData('donor_id'),
+            'employee_id' => $record->getPayloadData('employee_id'),
+            'transaction_date' => $record->getPayloadData('transaction_date'),
+            'transaction_status' => $record->getPayloadData('transaction_status'),
+            'amount' => (float) $record->getPayloadData('amount'),
+            'total_amount' => (float) $record->getPayloadData('total_amount'),
+            'donation_type' => $record->getPayloadData('donation_type')
         ]);
 
         $record->update([
