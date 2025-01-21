@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.4.1 - 2025-01-21
+
+### What's Changed
+
+* Adjustment get payload data from model upload by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/14
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.4.0...1.4.1
+
 ## 1.4.0 - 2025-01-21
 
 ### What's Changed
