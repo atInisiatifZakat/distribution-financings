@@ -12,7 +12,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class DistributionFinancingServiceProvider extends PackageServiceProvider
 {
-    public function boot(): void
+    public function bootingPackage(): void
     {
         ModelUpload::registerRecordProcessors([
             Donation::class => DonationProcessor::class,
