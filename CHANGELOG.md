@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.4.0 - 2025-01-21
+
+### What's Changed
+
+* Add Donation Upload by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/13
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.3.1...1.4.0
+
 ## 1.3.1 - 2025-01-17
 
 ### What's Changed
