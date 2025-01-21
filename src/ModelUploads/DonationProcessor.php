@@ -7,9 +7,9 @@ namespace Inisiatif\Distribution\Financings\ModelUploads;
 use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
+use Inisiatif\Distribution\Financings\Models\Donation;
 use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
 use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
-use Illuminate\Support\Facades\Log;
 use Inisiatif\Distribution\Financings\Models\Donation;
 
 final class DonationProcessor implements ModelUploadRecordProcessor

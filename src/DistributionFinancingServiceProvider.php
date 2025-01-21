@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings;
 
 use FromHome\ModelUpload\ModelUpload;
-use Inisiatif\Distribution\Financings\Models\Donation;
-use Inisiatif\Distribution\Financings\ModelUploads\DonationProcessor;
 use Spatie\LaravelPackageTools\Package;
+use Inisiatif\Distribution\Financings\Models\Donation;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Inisiatif\Distribution\Financings\ModelUploads\DonationProcessor;
 
 final class DistributionFinancingServiceProvider extends PackageServiceProvider
 {
