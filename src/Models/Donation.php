@@ -69,9 +69,9 @@ final class Donation extends Model implements ResourceInterface
     {
         $totalFinancingAmount = $this->getAttribute('financing')->sum('amount');
 
-        if($action){
+        if ($action) {
             $calculate = $this->getAttribute('total_amount') + $totalFinancingAmount;
-        }else{
+        } else {
             $calculate = $this->getAttribute('total_amount') - $totalFinancingAmount;
         }
 
@@ -89,6 +89,4 @@ final class Donation extends Model implements ResourceInterface
             get: fn () => $this->checkAmountRemaining(),
         );
     }
-
-
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
-use FromHome\ModelUpload\Actions\StoreModelUploadFile;
 use FromHome\ModelUpload\ModelUpload;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Inisiatif\Distribution\Financings\Http\Requests\UploadFileRequest;
+use FromHome\ModelUpload\Actions\StoreModelUploadFile;
 use Inisiatif\Distribution\Financings\Models\Financing;
+use Inisiatif\Distribution\Financings\Http\Requests\UploadFileRequest;
 use Inisiatif\Distribution\Financings\ModelUploads\ImportFinancingModelUpload;
 
 final class UploadFinancingController
@@ -21,7 +21,7 @@ final class UploadFinancingController
     public function store(UploadFileRequest $request, StoreModelUploadFile $uploadFile): JsonResource
     {
         $request->validate([
-            'distribution_id' => 'required|exists:distributions,id'
+            'distribution_id' => 'required|exists:distributions,id',
         ]);
 
         $uploadFile->handle(

@@ -7,11 +7,11 @@ namespace Inisiatif\Distribution\Financings\ModelUploads;
 use Throwable;
 use Illuminate\Database\Eloquent\Model;
 use FromHome\ModelUpload\Models\ModelUploadRecord;
-use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
-use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
-use Inisiatif\Distribution\Financings\Models\Distribution;
 use Inisiatif\Distribution\Financings\Models\Donation;
 use Inisiatif\Distribution\Financings\Models\Financing;
+use FromHome\ModelUpload\Exceptions\CannotProcessRecord;
+use Inisiatif\Distribution\Financings\Models\Distribution;
+use FromHome\ModelUpload\Processor\ModelUploadRecordProcessor;
 
 final class FinancingProcessor implements ModelUploadRecordProcessor
 {
@@ -36,20 +36,20 @@ final class FinancingProcessor implements ModelUploadRecordProcessor
         /** @var Donation|null $donation */
         $donation = Donation::query()->where('identification_number', $record->getPayloadData('identification_number'))->first();
 
-        if($donation === null){
+        if ($donation === null) {
             throw CannotProcessRecord::make('Donation not found');
         }
 
         /** @var Distribution|null $distribution */
         $distribution = Distribution::query()->where('id', $record->getMetaData('distribution_id'))->first();
 
-        if($distribution === null){
+        if ($distribution === null) {
             throw CannotProcessRecord::make('Program not found');
         }
 
         $isOverAmount = $distribution->isOverRequestAmount((float) $record->getPayloadData('amount'));
 
-        if($isOverAmount){
+        if ($isOverAmount) {
             throw CannotProcessRecord::make('Amount must be the same as distribution amount');
         }
 
