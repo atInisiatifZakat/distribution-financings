@@ -13,7 +13,7 @@ use FromHome\ModelUpload\Models\ModelUploadRecord;
 use FromHome\ModelUpload\AbstractModelRecordImport;
 use Inisiatif\Distribution\Financings\Models\Donation;
 
-final class ImportDonationModelUpload extends AbstractModelRecordImport implements OnEachRow, WithHeadingRow, WithStartRow
+final class ImportFinancingModelUpload extends AbstractModelRecordImport implements OnEachRow, WithHeadingRow, WithStartRow
 {
     public function onRow(Row $row): void
     {
