@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Row;
 
-final class ImportDonationModelUpload extends AbstractModelRecordImport implements OnEachRow, WithHeadingRow, WithStartRow
+final class ImportFinancingModelUpload extends AbstractModelRecordImport implements OnEachRow, WithHeadingRow, WithStartRow
 {
     public function onRow(Row $row): void
     {
