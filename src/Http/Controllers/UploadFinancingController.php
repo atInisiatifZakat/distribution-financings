@@ -21,7 +21,7 @@ final class UploadFinancingController
     public function store(UploadFileRequest $request, StoreModelUploadFile $uploadFile): JsonResource
     {
         $request->validate([
-            'distribution_id' => 'required|exists:distributions,id'
+            'distribution_id' => 'required|exists:distributions,id',
         ]);
 
         $uploadFile->handle(
