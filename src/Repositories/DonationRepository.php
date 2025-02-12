@@ -13,6 +13,7 @@ use Inisiatif\Distribution\Financings\Models\Donation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
+use Inisiatif\Package\User\ModelRegistrar;
 
 final class DonationRepository extends AbstractRepository
 {
@@ -22,30 +23,34 @@ final class DonationRepository extends AbstractRepository
     {
         $branch = $request->user()->getLoginable()->getAttribute('branch');
 
+        $branchTable = ModelRegistrar::getBranchModel()->getTable();
+
+        $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
+
         if ($branch && $branch->getAttribute('is_head_office') === false) {
             $builder = $this->getModel()->newQuery()
-                ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
+                ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
-                    'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
+                    $branchTable.'.name AS branch_name', 'donors.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
-                ->join('branches', 'donations.branch_id', '=', 'branches.id')
+                ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
                 ->join('donors', 'donations.donor_id', '=', 'donors.id')
-                ->join('employees', 'donations.employee_id', '=', 'employees.id')
+                ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
                 ->where('donations.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where('transaction_status', 'VERIFIED')
                 ->orderBy('transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
-                ->select('donations.id', 'branches.id AS branch_id', 'employees.id AS employee_id',
+                ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
-                    'branches.name AS branch_name', 'donors.name AS donor_name', 'employees.name AS employee_name',
+                    $branchTable.'.name AS branch_name', 'donors.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
-                ->join('branches', 'donations.branch_id', '=', 'branches.id')
+                ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
                 ->join('donors', 'donations.donor_id', '=', 'donors.id')
-                ->join('employees', 'donations.employee_id', '=', 'employees.id')
+                ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
                 ->where('transaction_status', 'VERIFIED')
                 ->orderBy('transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
