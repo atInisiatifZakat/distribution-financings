@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.3 - 2025-02-12
+
+### What's Changed
+
+* Adjustment donor table by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/19
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.2...1.5.3
+
 ## 1.5.2 - 2025-02-12
 
 ### What's Changed
