@@ -13,6 +13,7 @@ use Inisiatif\Distribution\Financings\Models\Donation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
+use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 use Inisiatif\Package\User\ModelRegistrar;
 
 final class DonationRepository extends AbstractRepository
@@ -27,15 +28,17 @@ final class DonationRepository extends AbstractRepository
 
         $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
 
+        $donorTable = app(DonorModelRegistrar::class)->getTableName();
+
         if ($branch && $branch->getAttribute('is_head_office') === false) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
-                    $branchTable.'.name AS branch_name', 'donors.name AS donor_name', $employeeTable.'.name AS employee_name',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
                 ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
-                ->join('donors', 'donations.donor_id', '=', 'donors.id')
+                ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
                 ->where('donations.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where('transaction_status', 'VERIFIED')
@@ -44,12 +47,12 @@ final class DonationRepository extends AbstractRepository
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
-                    $branchTable.'.name AS branch_name', 'donors.name AS donor_name', $employeeTable.'.name AS employee_name',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
                 ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
-                ->join('donors', 'donations.donor_id', '=', 'donors.id')
+                ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
                 ->where('transaction_status', 'VERIFIED')
                 ->orderBy('transaction_date', 'desc')
