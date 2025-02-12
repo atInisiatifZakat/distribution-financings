@@ -26,13 +26,16 @@ final class FinancingRepository extends AbstractRepository
             ->appends((array) $request->query());
     }
 
-    public function fetchUsingDistribution(string $distributionId)
+    public function fetchUsingDistribution(string $distributionId, Request $request)
     {
-        return $this->getModel()->newQuery()
+        $builder = $this->getModel()->newQuery()
             ->where('distribution_id', '=', $distributionId)
             ->with(['donation', 'donation.branch', 'donation.employee', 'donation.donor'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        return $this->queryBuilder($builder, $request)
+            ->paginate($request->integer('limit', 5))
+            ->appends((array) $request->query());
     }
 
     public function queryBuilder(Builder $builder, Request $request): QueryBuilder

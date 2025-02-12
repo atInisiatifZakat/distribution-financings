@@ -42,6 +42,7 @@ final class DonationRepository extends AbstractRepository
                 ->orderBy('transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
+        } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     'donors.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
@@ -67,6 +68,7 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('branch', 'branch_id'),
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
+            AllowedFilter::exact('donation_type', 'donation_type'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),

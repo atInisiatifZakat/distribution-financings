@@ -6,8 +6,8 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
