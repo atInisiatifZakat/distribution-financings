@@ -2,6 +2,22 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.1 - 2025-01-22
+
+### What's Changed
+
+* Fix donation column name by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/16
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.0...1.5.1
+
+## 1.5.0 - 2025-01-22
+
+### What's Changed
+
+* Add Upload Financing by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/15
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.4.1...1.5.0
+
 ## 1.4.1 - 2025-01-21
 
 ### What's Changed
