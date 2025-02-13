@@ -78,3 +78,4 @@ final class DonationRepository extends AbstractRepository
         ]);
     }
 }
+

@@ -2,6 +2,15 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.2 - 2025-02-12
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/atInisiatifZakat/distribution-financings/pull/17
+* Adjustment fetch Donation Query by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/18
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.1...1.5.2
+
 ## 1.5.1 - 2025-01-22
 
 ### What's Changed
