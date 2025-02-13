@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.4 - 2025-02-13
+
+### What's Changed
+
+* Change donation_type to type by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/20
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.3...1.5.4
+
 ## 1.5.3 - 2025-02-12
 
 ### What's Changed
