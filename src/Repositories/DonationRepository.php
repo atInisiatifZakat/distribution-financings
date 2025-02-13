@@ -33,7 +33,7 @@ final class DonationRepository extends AbstractRepository
         if ($branch && $branch->getAttribute('is_head_office') === false) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
@@ -47,7 +47,7 @@ final class DonationRepository extends AbstractRepository
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
@@ -70,7 +70,7 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('branch', 'branch_id'),
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
-            AllowedFilter::exact('donation_type', 'donation_type'),
+            AllowedFilter::exact('donation_type', 'type'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
