@@ -33,7 +33,7 @@ final class DonationRepository extends AbstractRepository
         if ($branch && $branch->getAttribute('is_head_office') === false) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
@@ -47,7 +47,7 @@ final class DonationRepository extends AbstractRepository
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
                 ->select('donations.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.donation_type',
+                    $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
                     'donations.total_amount')
