@@ -6,6 +6,7 @@ namespace Inisiatif\Distribution\Financings\Repositories;
 
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
+use Inisiatif\ModelShared\ModelShared;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,7 +25,7 @@ final class DonationRepository extends AbstractRepository
     {
         $branch = $request->user()->getLoginable()->getAttribute('branch');
 
-        $donationTable = ModelRegistrar::getDonationModel()->getTable();
+        $donationTable = ModelShared::getDonationModel();
 
         $branchTable = ModelRegistrar::getBranchModel()->getTable();
 
