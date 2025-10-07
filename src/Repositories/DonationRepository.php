@@ -25,7 +25,7 @@ final class DonationRepository extends AbstractRepository
     {
         $branch = $request->user()->getLoginable()->getAttribute('branch');
 
-        $donationTable = ModelShared::getDonationModel();
+        $donationTable = ModelShared::getDonationModel()->getTable();
 
         $branchTable = ModelRegistrar::getBranchModel()->getTable();
 
