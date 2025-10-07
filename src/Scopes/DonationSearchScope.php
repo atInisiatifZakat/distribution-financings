@@ -7,6 +7,7 @@ namespace Inisiatif\Distribution\Financings\Scopes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 
 final class DonationSearchScope implements Scope
 {
@@ -24,7 +25,9 @@ final class DonationSearchScope implements Scope
 
                 $grammar = $builder->getQuery()->getGrammar();
 
-                $name = $grammar->wrap($builder->qualifyColumn('donors.name'));
+                $donorTable = app(DonorModelRegistrar::class)->getTableName();
+
+                $name = $grammar->wrap($builder->qualifyColumn($donorTable.'.name'));
                 $number = $grammar->wrap($builder->qualifyColumn('identification_number'));
 
                 return $builder->orWhereRaw("LOWER({$number}) LIKE ?", ["%{$value}%"])
