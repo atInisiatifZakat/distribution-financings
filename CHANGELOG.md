@@ -2,6 +2,10 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.7 - 2025-10-07
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.6...1.5.7
+
 ## 1.5.6 - 2025-10-07
 
 ### What's Changed
