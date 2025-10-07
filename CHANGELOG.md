@@ -2,6 +2,16 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.5.6 - 2025-10-07
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/21
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/23
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/22
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.4...1.5.6
+
 ## 1.5.4 - 2025-02-13
 
 ### What's Changed
