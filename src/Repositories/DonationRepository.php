@@ -34,30 +34,30 @@ final class DonationRepository extends AbstractRepository
 
         if ($branch && $branch->getAttribute('is_head_office') === false) {
             $builder = $this->getModel()->newQuery()
-                ->select($donationTable . '.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', $donationTable . '.identification_number', $donationTable . '.type AS donation_type',
+                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
+                    $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    $donationTable . '.transaction_date', $donationTable . '.transaction_status', $donationTable . '.amount',
-                    $donationTable . '.total_amount')
-                ->join($branchTable, $donationTable . '.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, $donationTable . '.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, $donationTable . '.employee_id', '=', $employeeTable.'.id')
-                ->where($donationTable . '.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
-                ->where($donationTable . '.transaction_status', 'VERIFIED')
-                ->orderBy($donationTable . '.transaction_date', 'desc')
+                    $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
+                    $donationTable.'.total_amount')
+                ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
+                ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
+                ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
+                ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
+                ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
-                ->select($donationTable . '.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', $donationTable . '.identification_number', $donationTable . '.type AS donation_type',
+                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
+                    $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    $donationTable . '.transaction_date', $donationTable . '.transaction_status', $donationTable . '.amount',
-                    $donationTable . '.total_amount')
-                ->join($branchTable, $donationTable . '.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, $donationTable . '.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, $donationTable . '.employee_id', '=', $employeeTable.'.id')
-                ->where($donationTable . '.transaction_status', 'VERIFIED')
-                ->orderBy($donationTable . '.transaction_date', 'desc')
+                    $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
+                    $donationTable.'.total_amount')
+                ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
+                ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
+                ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
+                ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         }
 
