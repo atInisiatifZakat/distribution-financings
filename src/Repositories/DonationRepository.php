@@ -36,10 +36,12 @@ final class DonationRepository extends AbstractRepository
                     $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
-                    'donations.total_amount')
+                    'donations.total_amount', 'donation_details.funding_type_id', 'donation_details.program_id', 
+                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
+                ->join('donation_details', 'donations.id', '=', 'donation_details.donation_id')
                 ->where('donations.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where('transaction_status', 'VERIFIED')
                 ->orderBy('transaction_date', 'desc')
@@ -50,10 +52,12 @@ final class DonationRepository extends AbstractRepository
                     $donorTable.'.id AS donor_id', 'donations.identification_number', 'donations.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
-                    'donations.total_amount')
+                    'donations.total_amount', 'donation_details.funding_type_id', 'donation_details.program_id',
+                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
+                ->join('donation_details', 'donations.id', '=', 'donation_details.donation_id')
                 ->where('transaction_status', 'VERIFIED')
                 ->orderBy('transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
@@ -71,6 +75,8 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
             AllowedFilter::exact('donation_type', 'donation_type'),
+            AllowedFilter::exact('funding_type', 'donation_details.funding_type_id'),
+            AllowedFilter::exact('program', 'donation_details.program_id'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
