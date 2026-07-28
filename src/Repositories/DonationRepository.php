@@ -27,6 +27,12 @@ final class DonationRepository extends AbstractRepository
 
         $donationTable = ModelShared::getDonationModel()->getTable();
 
+        $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
+
+        $fundingTypeTable = ModelShared::getFundingTypeModel()->getTable();
+
+        $donationProgramTable = ModelShared::getProgramModel()->getTable();
+
         $branchTable = ModelRegistrar::getBranchModel()->getTable();
 
         $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
@@ -38,44 +44,33 @@ final class DonationRepository extends AbstractRepository
                 ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
-                    'donations.total_amount', 'donation_details.funding_type_id', 'donation_details.program_id', 
-                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
-                ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
-                ->join('donation_details', 'donations.id', '=', 'donation_details.donation_id')
-                ->where('donations.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
-                ->where('transaction_status', 'VERIFIED')
-                ->orderBy('transaction_date', 'desc')
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount')
+                    $donationTable.'.total_amount', $donationDetailTable.'.funding_type_id', $donationDetailTable.'.program_id', 
+                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
+                ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
+                ->join($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
+                ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
-                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
+            ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    'donations.transaction_date', 'donations.transaction_status', 'donations.amount',
-                    'donations.total_amount', 'donation_details.funding_type_id', 'donation_details.program_id',
-                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
-                ->join($branchTable, 'donations.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, 'donations.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, 'donations.employee_id', '=', $employeeTable.'.id')
-                ->join('donation_details', 'donations.id', '=', 'donation_details.donation_id')
-                ->where('transaction_status', 'VERIFIED')
-                ->orderBy('transaction_date', 'desc')
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount')
+                    $donationTable.'.total_amount', $donationDetailTable.'.funding_type_id', $donationDetailTable.'.program_id', 
+                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
+                ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
+                ->join($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
+                ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
