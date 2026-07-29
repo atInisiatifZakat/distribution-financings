@@ -55,6 +55,8 @@ final class DonationRepository extends AbstractRepository
                 ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($donationDetailTable.'.funding_type_id')
+                ->groupBy($donationDetailTable.'.program_id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
@@ -72,6 +74,8 @@ final class DonationRepository extends AbstractRepository
                 ->join($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
                 ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($donationDetailTable.'.funding_type_id')
+                ->groupBy($donationDetailTable.'.program_id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         }
