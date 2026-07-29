@@ -45,8 +45,8 @@ final class DonationRepository extends AbstractRepository
                     $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount', $donationDetailTable.'.funding_type_id', $donationDetailTable.'.program_id', 
-                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
+                    $donationTable.'.total_amount', $donationDetailTable.'.donation_detail_funding_type_id', $donationDetailTable.'.donation_detail_program_id', 
+                    $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
@@ -55,8 +55,8 @@ final class DonationRepository extends AbstractRepository
                 ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
-                ->groupBy($donationDetailTable.'.funding_type_id')
-                ->groupBy($donationDetailTable.'.program_id')
+                ->groupBy($donationDetailTable.'.donation_detail_funding_type_id')
+                ->groupBy($donationDetailTable.'.donation_detail_program_id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
@@ -65,8 +65,8 @@ final class DonationRepository extends AbstractRepository
                     $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount', $donationDetailTable.'.funding_type_id', $donationDetailTable.'.program_id', 
-                    $donorTable.'.id AS donor_id', $donorTable.'.identification_number AS donor_identification_number')
+                    $donationTable.'.total_amount', $donationDetailTable.'.donation_detail_funding_type_id', $donationDetailTable.'.donation_detail_program_id', 
+                    $donorTable.'.identification_number AS donor_identification_number')
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
@@ -74,8 +74,8 @@ final class DonationRepository extends AbstractRepository
                 ->join($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
                 ->join($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
-                ->groupBy($donationDetailTable.'.funding_type_id')
-                ->groupBy($donationDetailTable.'.program_id')
+                ->groupBy($donationDetailTable.'.donation_detail_funding_type_id')
+                ->groupBy($donationDetailTable.'.donation_detail_program_id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         }
