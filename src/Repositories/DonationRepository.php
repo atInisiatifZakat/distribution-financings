@@ -46,6 +46,7 @@ final class DonationRepository extends AbstractRepository
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
                     $donationTable.'.total_amount',
+                    $donationDetailTable.'.id AS donation_detail_id',
                     $donationDetailTable.'.funding_type_id',
                     $donationDetailTable.'.program_id',
                     $donorTable.'.identification_number AS donor_identification_number')
@@ -57,6 +58,7 @@ final class DonationRepository extends AbstractRepository
                 ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($donationDetailTable.'.id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
@@ -66,6 +68,7 @@ final class DonationRepository extends AbstractRepository
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
                     $donationTable.'.total_amount',
+                    $donationDetailTable.'.id AS donation_detail_id',
                     $donationDetailTable.'.funding_type_id',
                     $donationDetailTable.'.program_id',
                     $donorTable.'.identification_number AS donor_identification_number')
@@ -76,6 +79,7 @@ final class DonationRepository extends AbstractRepository
                 ->leftJoin($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
                 ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($donationDetailTable.'.id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         }
