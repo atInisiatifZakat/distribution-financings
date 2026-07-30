@@ -8,17 +8,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Inisiatif\ModelShared\ModelShared;
+use Illuminate\Database\Eloquent\Builder;
+use Inisiatif\Package\Common\Abstracts\AbstractRepository;
+use Inisiatif\Distribution\Financings\Models\DonationProgram;
 
-final class DonationProgramRepository
+final class DonationProgramRepository extends AbstractRepository
 {
+    protected $model = DonationProgram::class;
+
     public function fetchAll(Request $request): Collection
     {
-        return QueryBuilder::for(ModelShared::getProgramModel()->newQuery()->orderBy('name'), $request)
-            ->allowedFilters([
-                AllowedFilter::partial('name', 'name'),
-                AllowedFilter::exact('id', 'id'),
-            ])
-            ->get();
+        $builder = $this->getModel()->newQuery()->orderBy('name');
+
+        return $this->queryBuilder($builder, $request)->get();
+    }
+
+    public function queryBuilder(Builder $builder, Request $request): QueryBuilder
+    {
+        return QueryBuilder::for($builder, $request)->allowedFilters([
+            AllowedFilter::partial('name', 'name'),
+            AllowedFilter::exact('id', 'id'),
+        ]);
     }
 }

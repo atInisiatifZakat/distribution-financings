@@ -9,7 +9,6 @@ use Inisiatif\Package\User\ModelRegistrar;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Inisiatif\ModelShared\ModelShared;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
@@ -53,7 +52,7 @@ final class Donation extends Model implements ResourceInterface
 
     public function details(): HasMany
     {
-        return $this->hasMany(ModelShared::getDonationDetailModel()::class);
+        return $this->hasMany(config('financing.models.donation_detail', DonationDetail::class));
     }
 
     public function branch(): BelongsTo
