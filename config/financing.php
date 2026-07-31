@@ -16,6 +16,12 @@ return [
 
         'donations' => env('DISTRIBUTION_FINANCING_TABLE_DONATIONS', 'donations'),
 
+        'donation_details' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_DETAILS', 'donation_details'),
+
+        'donation_funding_types' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_FUNDING_TYPES', 'funding_types'),
+
+        'donation_programs' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_PROGRAMS', 'programs'),
+
         'distributions' => env('DISTRIBUTION_FINANCING_TABLE_DISTRIBUTIONS', 'distributions'),
     ],
 
@@ -29,6 +35,12 @@ return [
      */
     'models' => [
         'donation' => \Inisiatif\Distribution\Financings\Models\Donation::class,
+
+        'donation_detail' => \Inisiatif\Distribution\Financings\Models\DonationDetail::class,
+
+        'donation_funding_type' => \Inisiatif\Distribution\Financings\Models\DonationFundingType::class,
+
+        'donation_program' => \Inisiatif\Distribution\Financings\Models\DonationProgram::class,
 
         'distribution' => \Inisiatif\Distribution\Financings\Models\Distribution::class,
 
