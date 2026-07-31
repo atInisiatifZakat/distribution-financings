@@ -6,7 +6,6 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
@@ -17,9 +16,7 @@ final class DonationDetail extends Model implements ResourceInterface
     protected $guarded = [];
 
     protected $casts = [
-        'funding_type_id' => 'int',
         'amount' => 'float',
-        'total_amount' => 'float',
         'qurban_names' => 'array',
     ];
 
@@ -47,22 +44,16 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function donation(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.donation', Donation::class));
+        return $this->belongsTo(Donation::class);
     }
 
     public function fundingType(): BelongsTo
     {
-        return $this->belongsTo(
-            config('financing.models.donation_funding_type', DonationFundingType::class),
-            'funding_type_id'
-        )->withoutGlobalScope(SoftDeletingScope::class);
+        return $this->belongsTo(DonationFundingType::class, 'funding_type_id');
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(
-            config('financing.models.donation_program', DonationProgram::class),
-            'program_id'
-        )->withoutGlobalScope(SoftDeletingScope::class);
+        return $this->belongsTo(DonationProgram::class, 'program_id');
     }
 }

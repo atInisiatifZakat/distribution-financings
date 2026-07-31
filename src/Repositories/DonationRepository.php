@@ -6,16 +6,19 @@ namespace Inisiatif\Distribution\Financings\Repositories;
 
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
-use Inisiatif\ModelShared\ModelShared;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Illuminate\Database\Eloquent\Builder;
 use Inisiatif\Package\User\ModelRegistrar;
 use Inisiatif\Distribution\Financings\Models\Donation;
+use Inisiatif\Distribution\Financings\Models\DonationDetail;
+use Inisiatif\Distribution\Financings\Models\DonationProgram;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
+use Inisiatif\Distribution\Financings\Models\DonationFundingType;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
+use Inisiatif\ModelShared\ModelShared;
 
 final class DonationRepository extends AbstractRepository
 {
@@ -58,12 +61,16 @@ final class DonationRepository extends AbstractRepository
                 ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($branchTable.'.id')
+                ->groupBy($employeeTable.'.id')
+                ->groupBy($donorTable.'.id')
+                ->groupBy($donationTable.'.id')
                 ->groupBy($donationDetailTable.'.id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
             $builder = $this->getModel()->newQuery()
-            ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
+                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
                     $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
                     $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
                     $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
@@ -79,32 +86,45 @@ final class DonationRepository extends AbstractRepository
                 ->leftJoin($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
                 ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
+                ->groupBy($branchTable.'.id')
+                ->groupBy($employeeTable.'.id')
+                ->groupBy($donorTable.'.id')
+                ->groupBy($donationTable.'.id')
                 ->groupBy($donationDetailTable.'.id')
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         }
 
-        return $this->queryBuilder($builder, $request)
+        $query = $this->queryBuilder($builder, $request, $donationDetailTable);
+
+        \logger()->info('donation query', [
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings(),
+        ]);
+
+        return $query
             ->paginate($request->integer('limit', 5))
             ->appends((array) $request->query());
     }
 
-    public function queryBuilder(Builder $builder, Request $request): QueryBuilder
+    public function queryBuilder(Builder $builder, Request $request, ?string $donationDetailTable = null): QueryBuilder
     {
+        $donationDetailTable ??= (new DonationDetail)->getTable();
+
         return QueryBuilder::for($builder, $request)->allowedFilters([
             AllowedFilter::exact('branch', 'branch_id'),
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
             AllowedFilter::exact('donation_type', 'donation_type'),
-            AllowedFilter::exact('funding_type', 'donation_details.funding_type_id'),
-            AllowedFilter::exact('program', 'donation_details.program_id'),
+            AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
+            AllowedFilter::exact('program', $donationDetailTable.'.program_id'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
             AllowedInclude::relationship('donor'),
             AllowedInclude::relationship('details'),
-            AllowedInclude::relationship('funding_type', 'details.funding'),
-            AllowedInclude::relationship('program', 'details.program'),
+            AllowedInclude::callback('funding_type', fn (Builder $query) => $query->with('details.fundingType')),
+            AllowedInclude::callback('program', fn (Builder $query) => $query->with('details.program')),
         ]);
     }
 }
