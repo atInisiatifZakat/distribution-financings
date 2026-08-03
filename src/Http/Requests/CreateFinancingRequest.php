@@ -6,9 +6,9 @@ namespace Inisiatif\Distribution\Financings\Http\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use Inisiatif\Distribution\Financings\Models\DonationProgram;
-use Inisiatif\Distribution\Models\Distribution\Distribution;
 use Inisiatif\ModelShared\Models\FundingType;
+use Inisiatif\Distribution\Models\Distribution\Distribution;
+use Inisiatif\Distribution\Financings\Models\DonationProgram;
 
 final class CreateFinancingRequest extends FormRequest
 {

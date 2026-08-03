@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inisiatif\ModelShared\ModelShared;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inisiatif\Distribution\Financings\Models\Donation;
@@ -16,7 +17,6 @@ use Inisiatif\Distribution\Financings\Http\Resources\FinancingResource;
 use Inisiatif\Distribution\Financings\Repositories\FinancingRepository;
 use Inisiatif\Distribution\Financings\DataTransfers\CreateFinancingData;
 use Inisiatif\Distribution\Financings\Http\Requests\CreateFinancingRequest;
-use Inisiatif\ModelShared\ModelShared;
 
 final class FinancingController
 {

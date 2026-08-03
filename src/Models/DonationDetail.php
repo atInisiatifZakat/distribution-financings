@@ -6,9 +6,9 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Inisiatif\ModelShared\Models\FundingType;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Inisiatif\ModelShared\Models\FundingType;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
 final class DonationDetail extends Model implements ResourceInterface

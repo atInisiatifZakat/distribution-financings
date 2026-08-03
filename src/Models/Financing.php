@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\ModelShared\Models\FundingType;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
