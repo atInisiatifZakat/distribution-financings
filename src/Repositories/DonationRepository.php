@@ -6,19 +6,17 @@ namespace Inisiatif\Distribution\Financings\Repositories;
 
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
+use Inisiatif\ModelShared\ModelShared;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedInclude;
 use Illuminate\Database\Eloquent\Builder;
 use Inisiatif\Package\User\ModelRegistrar;
 use Inisiatif\Distribution\Financings\Models\Donation;
-use Inisiatif\Distribution\Financings\Models\DonationDetail;
-use Inisiatif\Distribution\Financings\Models\DonationProgram;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
-use Inisiatif\Distribution\Financings\Models\DonationFundingType;
+use Inisiatif\Distribution\Financings\Models\DonationDetail;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
-use Inisiatif\ModelShared\ModelShared;
 
 final class DonationRepository extends AbstractRepository
 {
