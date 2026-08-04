@@ -49,4 +49,20 @@ final class CreateFinancingData extends DataTransferObject
     #[MapTo('distribution_sector_name')]
     #[MapFrom('distribution_sector_name')]
     public string $distributionSectorName;
+
+    #[MapTo('donor_id')]
+    #[MapFrom('donor_id')]
+    public string $donorId;
+
+    #[MapTo('donor_identification_number')]
+    #[MapFrom('donor_identification_number')]
+    public string $donorIdentificationNumber;
+
+    #[MapTo('funding_id')]
+    #[MapFrom('funding_id')]
+    public string $fundingId;
+
+    #[MapTo('program_id')]
+    #[MapFrom('program_id')]
+    public string $programId;
 }

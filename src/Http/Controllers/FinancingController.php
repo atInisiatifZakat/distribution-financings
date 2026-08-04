@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inisiatif\ModelShared\ModelShared;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inisiatif\Distribution\Financings\Models\Donation;
@@ -32,6 +33,9 @@ final class FinancingController
         /** @var Donation|null $donation */
         $donation = Donation::query()->find($request->input('donation_id'));
 
+        /** @var Donor $donor */
+        $donor = ModelShared::getDonorModel()::query()->find($request->input('donor_id'));
+
         if ($distribution === null || $donation === null) {
             throw ValidationException::withMessages(($distribution === null) ? [
                 'distribution_id' => 'Distribution doesn`t exists',
@@ -55,6 +59,10 @@ final class FinancingController
                 'distribution_sector_id' => $distribution->getAttribute('program_sector_id'),
                 'distribution_program_name' => $distribution->getAttribute('program')->getAttribute('name'),
                 'distribution_sector_name' => $distribution->getAttribute('program_sector')->getAttribute('name'),
+                'donor_id' => $donor->getAttribute('id'),
+                'donor_identification_number' => $donor->getAttribute('identification_number'),
+                'funding_id' => $request->input('funding_id'),
+                'program_id' => $request->input('program_id'),
             ]))
         );
 
