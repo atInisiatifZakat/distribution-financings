@@ -2,6 +2,15 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.6.1 - 2026-08-04
+
+### What's Changed
+
+* chore: bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/32
+* chore : menambahkan kolom `funding_type_id` and `program_id` by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/31
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.6.0...1.6.1
+
 ## 1.6.0 - 2026-07-31
 
 ### What's Changed
