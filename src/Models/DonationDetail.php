@@ -44,15 +44,13 @@ final class DonationDetail extends Model implements ResourceInterface
         return $this->belongsTo(config('financing.models.donation', Donation::class));
     }
 
-    public function program(): BelongsTo
+    public function funding(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.donation_program', DonationProgram::class), 'program_id')
-            ->withoutGlobalScope(SoftDeletingScope::class);
+        return $this->belongsTo(DonationFundingType::class, 'funding_type_id')->withTrashed();
     }
 
-    public function fundingType(): BelongsTo
+    public function program(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.funding_type', FundingType::class), 'funding_type_id')
-            ->withoutGlobalScope(SoftDeletingScope::class);
+        return $this->belongsTo(DonationProgram::class, 'program_id')->withTrashed();
     }
 }

@@ -45,6 +45,8 @@ final class FinancingRepository extends AbstractRepository
             AllowedFilter::exact('distribution', 'distribution_id'),
             AllowedFilter::exact('program', 'distribution_program_id'),
             AllowedFilter::exact('program_sector', 'distribution_sector_id'),
+            AllowedFilter::exact('donation_detail_funding_type'),
+            AllowedFilter::exact('donation_detail_program'),
             AllowedFilter::custom('created_at', new DateIntervalFilter, 'created_at'),
             AllowedFilter::custom('distribution_at', new DateIntervalFilter, 'distribution_at'),
         ])->allowedIncludes([
@@ -52,6 +54,8 @@ final class FinancingRepository extends AbstractRepository
             AllowedInclude::relationship('distribution'),
             AllowedInclude::relationship('program'),
             AllowedInclude::relationship('program_sector'),
+            AllowedInclude::relationship('donation_detail_funding_type', 'funding'),
+            AllowedInclude::relationship('donation_detail_program', 'program'),
         ]);
     }
 }

@@ -55,6 +55,22 @@ final class Donation extends Model implements ResourceInterface
         return $this->hasMany(config('financing.models.donation_detail', DonationDetail::class));
     }
 
+    public function funding(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('financing.models.donation_funding_type', DonationFundingType::class),
+            'funding_type_id'
+        )->withTrashed();
+    }
+
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('financing.models.donation_program', DonationProgram::class),
+            'program_id'
+        )->withTrashed();
+    }
+
     public function branch(): BelongsTo
     {
         return $this->belongsTo(ModelRegistrar::getBranchModelClass());

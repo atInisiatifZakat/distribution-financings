@@ -6,7 +6,6 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Inisiatif\ModelShared\Models\FundingType;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
@@ -53,11 +52,11 @@ final class Financing extends Model implements ResourceInterface
 
     public function funding(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.funding', FundingType::class));
+        return $this->belongsTo(DonationFundingType::class, 'donation_detail_funding_type_id')->withTrashed();
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.program', DonationProgram::class));
+        return $this->belongsTo(DonationProgram::class, 'donation_detail_program_id')->withTrashed();
     }
 }
