@@ -126,8 +126,8 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('employee', 'employee_id'),
             AllowedFilter::exact('status', 'transaction_status'),
             AllowedFilter::exact('donation_type', 'donation_type'),
-            AllowedFilter::exact('funding_type', 'funding_type_id'),
-            AllowedFilter::exact('program', 'program_id'),
+            AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
+            AllowedFilter::exact('program', $donationDetailTable.'.program_id'),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
