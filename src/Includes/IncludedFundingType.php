@@ -11,7 +11,7 @@ final class IncludedFundingType implements IncludeInterface
 {
     public function __invoke(Builder $query, string $relation): void
     {
-        $query->with(['funding' => function ($query) {
+        $query->with(['funding' => function ($query): void {
             $query->select('id', 'name');
         }]);
     }

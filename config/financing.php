@@ -41,7 +41,7 @@ return [
         'donation_program' => \Inisiatif\Distribution\Financings\Models\DonationProgram::class,
 
         'donation_funding_type' => \Inisiatif\Distribution\Financings\Models\DonationFundingType::class,
-        
+
         'distribution' => \Inisiatif\Distribution\Financings\Models\Distribution::class,
 
         'program' => \Inisiatif\Distribution\Financings\Models\Program::class,
