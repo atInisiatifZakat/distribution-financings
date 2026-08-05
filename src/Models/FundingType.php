@@ -6,14 +6,20 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
-final class DonationDetail extends Model implements ResourceInterface
+final class DonationFundingType extends Model implements ResourceInterface
 {
     use SoftDeletes;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'id' => 'int',
+        'is_terikat' => 'bool',
+        'is_dskl' => 'bool',
+        'print_bsz' => 'bool',
+    ];
 
     public function getConnectionName(): string
     {
@@ -22,7 +28,7 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donation_details', parent::getTable());
+        return \config('financing.table.funding_types', parent::getTable());
     }
 
     public function getId(): ?string
@@ -35,20 +41,5 @@ final class DonationDetail extends Model implements ResourceInterface
     public function setId($id): void
     {
         $this->setAttribute('id', $id);
-    }
-
-    public function donation(): BelongsTo
-    {
-        return $this->belongsTo(config('financing.models.donation', Donation::class));
-    }
-
-    public function funding(): BelongsTo
-    {
-        return $this->belongsTo(DonationFundingType::class, 'funding_type_id')->withTrashed();
-    }
-
-    public function program(): BelongsTo
-    {
-        return $this->belongsTo(DonationProgram::class, 'program_id')->withTrashed();
     }
 }

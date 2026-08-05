@@ -9,8 +9,8 @@ use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Inisiatif\Distribution\Financings\Models\DonationFundingType;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
+use Inisiatif\Distribution\Financings\Models\DonationFundingType;
 
 final class FundingTypeRepository extends AbstractRepository
 {

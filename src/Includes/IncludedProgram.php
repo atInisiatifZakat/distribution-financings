@@ -11,7 +11,7 @@ final class IncludedProgram implements IncludeInterface
 {
     public function __invoke(Builder $query, string $relation): void
     {
-        $query->with(['program' => function ($query) {
+        $query->with(['program' => function ($query): void {
             $query->select('id', 'name');
         }]);
     }
