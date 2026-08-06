@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inisiatif\ModelShared\Models\FundingType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Common\Concerns\UuidPrimaryKey;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
@@ -28,7 +27,7 @@ final class Financing extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.distribution_financings', parent::getTable());
+        return \config('financing.table.distribution.financing', parent::getTable());
     }
 
     public function getId(): ?string
@@ -43,21 +42,27 @@ final class Financing extends Model implements ResourceInterface
 
     public function distribution(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.distribution', Distribution::class));
+        return $this->belongsTo(config('financing.models.distribution.model', Distribution::class));
     }
 
     public function donation(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.donation', Donation::class));
+        return $this->belongsTo(config('financing.models.donation.model', Donation::class));
     }
 
     public function funding(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.funding', FundingType::class));
+        return $this->belongsTo(
+            config('financing.models.donation.funding_type', DonationFundingType::class),
+            'donation_detail_funding_type_id'
+        )->withTrashed();
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.program', DonationProgram::class));
+        return $this->belongsTo(
+            config('financing.models.donation.program', DonationProgram::class),
+            'donation_detail_program_id'
+        )->withTrashed();
     }
 }

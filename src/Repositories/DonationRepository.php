@@ -13,10 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Inisiatif\Package\User\ModelRegistrar;
 use Inisiatif\Distribution\Financings\Models\Donation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Inisiatif\ModelShared\Registrars\DonorModelRegistrar;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
 use Inisiatif\Distribution\Financings\Models\DonationDetail;
+use Inisiatif\Distribution\Financings\Includes\IncludedProgram;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
+use Inisiatif\Distribution\Financings\Includes\IncludedFundingType;
 
 final class DonationRepository extends AbstractRepository
 {
@@ -38,25 +39,33 @@ final class DonationRepository extends AbstractRepository
 
         $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
 
-        $donorTable = app(DonorModelRegistrar::class)->getTableName();
+        $donorTable = ModelShared::getDonorModel()->getTable();
 
         if ($branch && $branch->getAttribute('is_head_office') === false) {
-            $builder = $this->getModel()->newQuery()
-                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
-                    $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount',
-                    $donationDetailTable.'.id AS donation_detail_id',
-                    $donationDetailTable.'.funding_type_id',
-                    $donationDetailTable.'.program_id',
-                    $donorTable.'.identification_number AS donor_identification_number')
+            $builder = $this->getModel()->newQuery()->select(
+                $donationTable.'.id',
+                $branchTable.'.id AS branch_id',
+                $employeeTable.'.id AS employee_id',
+                $donorTable.'.id AS donor_id',
+                $donationTable.'.identification_number',
+                $donationTable.'.type AS donation_type',
+                $branchTable.'.name AS branch_name',
+                $donorTable.'.name AS donor_name',
+                $donorTable.'.identification_number AS donor_identification_number',
+                $employeeTable.'.name AS employee_name',
+                $donationTable.'.transaction_date',
+                $donationTable.'.transaction_status',
+                $donationTable.'.amount',
+                $donationTable.'.total_amount',
+                $donationDetailTable.'.id AS donation_detail_id',
+                $donationDetailTable.'.funding_type_id',
+                $donationDetailTable.'.program_id', )
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
                 ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
-                ->leftJoin($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
-                ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
+                ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
+                ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
                 ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
                 ->groupBy($branchTable.'.id')
@@ -67,22 +76,30 @@ final class DonationRepository extends AbstractRepository
                 ->orderBy($donationTable.'.transaction_date', 'desc')
                 ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
         } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
-            $builder = $this->getModel()->newQuery()
-                ->select($donationTable.'.id', $branchTable.'.id AS branch_id', $employeeTable.'.id AS employee_id',
-                    $donorTable.'.id AS donor_id', $donationTable.'.identification_number', $donationTable.'.type AS donation_type',
-                    $branchTable.'.name AS branch_name', $donorTable.'.name AS donor_name', $employeeTable.'.name AS employee_name',
-                    $donationTable.'.transaction_date', $donationTable.'.transaction_status', $donationTable.'.amount',
-                    $donationTable.'.total_amount',
-                    $donationDetailTable.'.id AS donation_detail_id',
-                    $donationDetailTable.'.funding_type_id',
-                    $donationDetailTable.'.program_id',
-                    $donorTable.'.identification_number AS donor_identification_number')
+            $builder = $this->getModel()->newQuery()->select(
+                $donationTable.'.id',
+                $branchTable.'.id AS branch_id',
+                $employeeTable.'.id AS employee_id',
+                $donorTable.'.id AS donor_id',
+                $donationTable.'.identification_number',
+                $donationTable.'.type AS donation_type',
+                $branchTable.'.name AS branch_name',
+                $donorTable.'.name AS donor_name',
+                $donorTable.'.identification_number AS donor_identification_number',
+                $employeeTable.'.name AS employee_name',
+                $donationTable.'.transaction_date',
+                $donationTable.'.transaction_status',
+                $donationTable.'.amount',
+                $donationTable.'.total_amount',
+                $donationDetailTable.'.id AS donation_detail_id',
+                $donationDetailTable.'.funding_type_id',
+                $donationDetailTable.'.program_id', )
                 ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
                 ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
                 ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
                 ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
-                ->leftJoin($fundingTypeTable, $donationDetailTable.'.funding_type_id', '=', $fundingTypeTable.'.id')
-                ->leftJoin($donationProgramTable, $donationDetailTable.'.program_id', '=', $donationProgramTable.'.id')
+                ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
+                ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
                 ->where($donationTable.'.transaction_status', 'VERIFIED')
                 ->groupBy($branchTable.'.id')
                 ->groupBy($employeeTable.'.id')
@@ -94,11 +111,6 @@ final class DonationRepository extends AbstractRepository
         }
 
         $query = $this->queryBuilder($builder, $request, $donationDetailTable);
-
-        \logger()->info('donation query', [
-            'sql' => $query->toSql(),
-            'bindings' => $query->getBindings(),
-        ]);
 
         return $query
             ->paginate($request->integer('limit', 5))
@@ -121,8 +133,8 @@ final class DonationRepository extends AbstractRepository
             AllowedInclude::relationship('employee'),
             AllowedInclude::relationship('donor'),
             AllowedInclude::relationship('details'),
-            AllowedInclude::callback('funding_type', fn (Builder $query) => $query->with('details.fundingType')),
-            AllowedInclude::callback('program', fn (Builder $query) => $query->with('details.program')),
+            AllowedInclude::custom('funding_type', new IncludedFundingType),
+            AllowedInclude::custom('program', new IncludedProgram),
         ]);
     }
 }

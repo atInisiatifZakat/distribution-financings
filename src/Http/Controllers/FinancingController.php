@@ -28,21 +28,22 @@ final class FinancingController
     public function store(CreateFinancingRequest $request, CreateFinancingAction $action)
     {
         /** @var Distribution|null $distribution */
-        $distribution = Distribution::query()->find($request->input('distribution_id'))->loadMissing(['program', 'program_sector']);
+        $distribution = Distribution::query()->find($request->input('distribution_id'));
 
         /** @var Donation|null $donation */
         $donation = Donation::query()->find($request->input('donation_id'));
 
-        /** @var Donor $donor */
         $donor = ModelShared::getDonorModel()::query()->find($request->input('donor_id'));
 
-        if ($distribution === null || $donation === null) {
-            throw ValidationException::withMessages(($distribution === null) ? [
-                'distribution_id' => 'Distribution doesn`t exists',
-            ] : [
-                'donation_id' => 'Distribution doesn`t exists',
-            ]);
+        if ($distribution === null || $donation === null || $donor === null) {
+            throw ValidationException::withMessages(match (true) {
+                $distribution === null => ['distribution_id' => 'Distribution doesn`t exists'],
+                $donation === null => ['donation_id' => 'Donation doesn`t exists'],
+                default => ['donor_id' => 'Donor doesn`t exists'],
+            });
         }
+
+        $distribution->loadMissing(['program', 'program_sector']);
 
         if ($distribution->isOverRequestAmount($request->integer('amount'))) {
             throw ValidationException::withMessages([
@@ -61,8 +62,8 @@ final class FinancingController
                 'distribution_sector_name' => $distribution->getAttribute('program_sector')->getAttribute('name'),
                 'donor_id' => $donor->getAttribute('id'),
                 'donor_identification_number' => $donor->getAttribute('identification_number'),
-                'funding_id' => $request->input('funding_id'),
-                'program_id' => $request->input('program_id'),
+                'donation_detail_funding_type_id' => $request->input('donation_detail_funding_type_id'),
+                'donation_detail_program_id' => $request->input('donation_detail_program_id'),
             ]))
         );
 

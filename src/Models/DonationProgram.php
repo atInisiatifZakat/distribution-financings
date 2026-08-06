@@ -16,15 +16,6 @@ final class DonationProgram extends Model implements ResourceInterface
 
     protected $guarded = [];
 
-    protected $casts = [
-        'program_category_id' => 'int',
-        'funding_type_id' => 'int',
-        'is_regular' => 'bool',
-        'is_ramadhan' => 'bool',
-        'end_date' => 'date',
-        'target' => 'float',
-    ];
-
     public function getConnectionName(): string
     {
         return \config('financing.connection', parent::getConnectionName());
@@ -32,7 +23,7 @@ final class DonationProgram extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donation_programs', parent::getTable());
+        return \config('financing.table.donation.program', parent::getTable());
     }
 
     public function getId(): ?string
