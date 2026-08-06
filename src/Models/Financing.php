@@ -50,7 +50,7 @@ final class Financing extends Model implements ResourceInterface
         return $this->belongsTo(config('financing.models.donation.model', Donation::class));
     }
 
-    public function funding(): BelongsTo
+    public function funding_type(): BelongsTo
     {
         return $this->belongsTo(
             config('financing.models.donation.funding_type', DonationFundingType::class),
