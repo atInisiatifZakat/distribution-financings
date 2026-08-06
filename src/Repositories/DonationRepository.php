@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Inisiatif\Package\User\ModelRegistrar;
 use Inisiatif\Distribution\Financings\Models\Donation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Inisiatif\Distribution\Financings\Filters\DateIntervalFilter;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
 use Inisiatif\Distribution\Financings\Models\DonationDetail;
 use Inisiatif\Distribution\Financings\Includes\IncludedProgram;
+use Inisiatif\Distribution\Financings\Filters\DateIntervalFilter;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
 use Inisiatif\Distribution\Financings\Includes\IncludedFundingType;
 
@@ -132,7 +132,7 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('donor_name', $donorTable.'name'),
             AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
             AllowedFilter::exact('program', $donationDetailTable.'.program_id'),
-            AllowedFilter::custom('transaction_date', new DateIntervalFilter()),
+            AllowedFilter::custom('transaction_date', new DateIntervalFilter),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),
