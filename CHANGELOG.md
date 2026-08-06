@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.0 - 2026-08-06
+
+### What's Changed
+
+* refactor: improve financing codebase with donation detail funding & program by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/33
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.6.1...1.7.0
+
 ## 1.6.1 - 2026-08-04
 
 ### What's Changed
