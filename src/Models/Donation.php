@@ -32,7 +32,7 @@ final class Donation extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donations', parent::getTable());
+        return \config('financing.table.donation.model', parent::getTable());
     }
 
     public function getId(): ?string
@@ -52,13 +52,13 @@ final class Donation extends Model implements ResourceInterface
 
     public function details(): HasMany
     {
-        return $this->hasMany(config('financing.models.donation_detail', DonationDetail::class));
+        return $this->hasMany(config('financing.models.donation.detail', DonationDetail::class));
     }
 
     public function funding(): BelongsTo
     {
         return $this->belongsTo(
-            config('financing.models.donation_funding_type', DonationFundingType::class),
+            config('financing.models.donation.funding_type', DonationFundingType::class),
             'funding_type_id'
         )->withTrashed();
     }
@@ -66,7 +66,7 @@ final class Donation extends Model implements ResourceInterface
     public function program(): BelongsTo
     {
         return $this->belongsTo(
-            config('financing.models.donation_program', DonationProgram::class),
+            config('financing.models.donation.program', DonationProgram::class),
             'program_id'
         )->withTrashed();
     }

@@ -42,12 +42,12 @@ final class Distribution extends Model implements ResourceInterface
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.program', Program::class));
+        return $this->belongsTo(config('financing.models.distribution.program', Program::class));
     }
 
     public function program_sector(): BelongsTo
     {
-        return $this->belongsTo(config('financing.model.program_sector', ProgramSector::class));
+        return $this->belongsTo(config('financing.models.distribution.program_sector', ProgramSector::class));
     }
 
     public function getId(): ?string

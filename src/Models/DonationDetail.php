@@ -22,7 +22,7 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donation_details', parent::getTable());
+        return \config('financing.table.donation.detail', parent::getTable());
     }
 
     public function getId(): ?string
@@ -39,16 +39,22 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function donation(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.donation', Donation::class));
+        return $this->belongsTo(config('financing.models.donation.model', Donation::class));
     }
 
     public function funding(): BelongsTo
     {
-        return $this->belongsTo(DonationFundingType::class, 'funding_type_id')->withTrashed();
+        return $this->belongsTo(
+            config('financing.models.donation.funding_type', DonationFundingType::class),
+            'funding_type_id'
+        )->withTrashed();
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(DonationProgram::class, 'program_id')->withTrashed();
+        return $this->belongsTo(
+            config('financing.models.donation.program', DonationProgram::class),
+            'program_id'
+        )->withTrashed();
     }
 }

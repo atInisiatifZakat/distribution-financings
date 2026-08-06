@@ -23,7 +23,7 @@ final class DonationProgram extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donation_programs', parent::getTable());
+        return \config('financing.table.donation.program', parent::getTable());
     }
 
     public function getId(): ?string
