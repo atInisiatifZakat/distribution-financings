@@ -12,17 +12,21 @@ return [
      * This is table name for financing
      */
     'table' => [
-        'distribution_financings' => env('DISTRIBUTION_FINANCING_TABLE_FINANCING', 'distribution_financings'),
+        'donation' => [
+            'model' => env('DISTRIBUTION_FINANCING_TABLE_DONATIONS', 'donations'),
 
-        'donations' => env('DISTRIBUTION_FINANCING_TABLE_DONATIONS', 'donations'),
+            'detail' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_DETAILS', 'donation_details'),
 
-        'donation_details' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_DETAILS', 'donation_details'),
+            'program' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_PROGRAMS', 'programs'),
 
-        'donation_programs' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_PROGRAMS', 'programs'),
+            'funding_type' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_FUNDING_TYPES', 'funding_types'),
+        ],
 
-        'donation_funding_types' => env('DISTRIBUTION_FINANCING_TABLE_DONATION_FUNDING_TYPES', 'funding_types'),
+        'distribution' => [
+            'model' => env('DISTRIBUTION_FINANCING_TABLE_DISTRIBUTIONS', 'distributions'),
 
-        'distributions' => env('DISTRIBUTION_FINANCING_TABLE_DISTRIBUTIONS', 'distributions'),
+            'financing' => env('DISTRIBUTION_FINANCING_TABLE_FINANCING', 'distribution_financings'),
+        ],
     ],
 
     /**
@@ -34,18 +38,22 @@ return [
      * This is model name for financing
      */
     'models' => [
-        'donation' => \Inisiatif\Distribution\Financings\Models\Donation::class,
+        'donation' => [
+            'model' => \Inisiatif\Distribution\Financings\Models\Donation::class,
 
-        'donation_detail' => \Inisiatif\Distribution\Financings\Models\DonationDetail::class,
+            'detail' => \Inisiatif\Distribution\Financings\Models\DonationDetail::class,
 
-        'donation_program' => \Inisiatif\Distribution\Financings\Models\DonationProgram::class,
+            'program' => \Inisiatif\Distribution\Financings\Models\DonationProgram::class,
 
-        'donation_funding_type' => \Inisiatif\Distribution\Financings\Models\DonationFundingType::class,
-        
-        'distribution' => \Inisiatif\Distribution\Financings\Models\Distribution::class,
+            'funding_type' => \Inisiatif\Distribution\Financings\Models\DonationFundingType::class,
+        ],
 
-        'program' => \Inisiatif\Distribution\Financings\Models\Program::class,
+        'distribution' => [
+            'model' => \Inisiatif\Distribution\Financings\Models\Distribution::class,
 
-        'program_sector' => \Inisiatif\Distribution\Financings\Models\ProgramSector::class,
+            'program' => \Inisiatif\Distribution\Financings\Models\Program::class,
+
+            'program_sector' => \Inisiatif\Distribution\Financings\Models\ProgramSector::class,
+        ],
     ],
 ];

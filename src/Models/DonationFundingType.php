@@ -28,7 +28,7 @@ final class DonationFundingType extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.funding_types', parent::getTable());
+        return \config('financing.table.donation.funding_type', parent::getTable());
     }
 
     public function getId(): ?string

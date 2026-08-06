@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inisiatif\ModelShared\ModelShared;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Inisiatif\Distribution\Financings\Models\Donation;
@@ -27,18 +28,22 @@ final class FinancingController
     public function store(CreateFinancingRequest $request, CreateFinancingAction $action)
     {
         /** @var Distribution|null $distribution */
-        $distribution = Distribution::query()->find($request->input('distribution_id'))->loadMissing(['program', 'program_sector']);
+        $distribution = Distribution::query()->find($request->input('distribution_id'));
 
         /** @var Donation|null $donation */
         $donation = Donation::query()->find($request->input('donation_id'));
 
-        if ($distribution === null || $donation === null) {
-            throw ValidationException::withMessages(($distribution === null) ? [
-                'distribution_id' => 'Distribution doesn`t exists',
-            ] : [
-                'donation_id' => 'Distribution doesn`t exists',
-            ]);
+        $donor = ModelShared::getDonorModel()::query()->find($request->input('donor_id'));
+
+        if ($distribution === null || $donation === null || $donor === null) {
+            throw ValidationException::withMessages(match (true) {
+                $distribution === null => ['distribution_id' => 'Distribution doesn`t exists'],
+                $donation === null => ['donation_id' => 'Donation doesn`t exists'],
+                default => ['donor_id' => 'Donor doesn`t exists'],
+            });
         }
+
+        $distribution->loadMissing(['program', 'program_sector']);
 
         if ($distribution->isOverRequestAmount($request->integer('amount'))) {
             throw ValidationException::withMessages([
@@ -55,6 +60,10 @@ final class FinancingController
                 'distribution_sector_id' => $distribution->getAttribute('program_sector_id'),
                 'distribution_program_name' => $distribution->getAttribute('program')->getAttribute('name'),
                 'distribution_sector_name' => $distribution->getAttribute('program_sector')->getAttribute('name'),
+                'donor_id' => $donor->getAttribute('id'),
+                'donor_identification_number' => $donor->getAttribute('identification_number'),
+                'donation_detail_funding_type_id' => $request->input('donation_detail_funding_type_id'),
+                'donation_detail_program_id' => $request->input('donation_detail_program_id'),
             ]))
         );
 

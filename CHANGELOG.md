@@ -2,6 +2,42 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.0 - 2026-08-06
+
+### What's Changed
+
+* refactor: improve financing codebase with donation detail funding & program by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/33
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.6.1...1.7.0
+
+## 1.6.1 - 2026-08-04
+
+### What's Changed
+
+* chore: bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/32
+* chore : menambahkan kolom `funding_type_id` and `program_id` by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/31
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.6.0...1.6.1
+
+## 1.6.0 - 2026-07-31
+
+### What's Changed
+
+* refactor: menambahkan penyesuaian untuk kebutuhan informasi transaksi by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/30
+  
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/26
+  
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/24
+  
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/25
+  
+* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/27
+  
+* Bump dependabot/fetch-metadata from 2.5.0 to 3.1.0 by @dependabot[bot] in https://github.com/atInisiatifZakat/distribution-financings/pull/29
+  
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.8...1.6.0
+
 ## 1.5.8 - 2025-10-07
 
 **Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.5.7...1.5.8

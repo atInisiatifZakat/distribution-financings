@@ -6,7 +6,6 @@ namespace Inisiatif\Distribution\Financings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Inisiatif\Package\Contract\Common\Model\ResourceInterface;
 
@@ -23,7 +22,7 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function getTable(): string
     {
-        return \config('financing.table.donation_details', parent::getTable());
+        return \config('financing.table.donation.detail', parent::getTable());
     }
 
     public function getId(): ?string
@@ -40,18 +39,22 @@ final class DonationDetail extends Model implements ResourceInterface
 
     public function donation(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.donation', Donation::class));
+        return $this->belongsTo(config('financing.models.donation.model', Donation::class));
+    }
+
+    public function funding(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('financing.models.donation.funding_type', DonationFundingType::class),
+            'funding_type_id'
+        )->withTrashed();
     }
 
     public function program(): BelongsTo
     {
-        return $this->belongsTo(config('financing.models.donation_program', DonationProgram::class), 'program_id')
-            ->withoutGlobalScope(SoftDeletingScope::class);
-    }
-
-    public function fundingType(): BelongsTo
-    {
-        return $this->belongsTo(config('financing.models.funding_type', FundingType::class), 'funding_type_id')
-            ->withoutGlobalScope(SoftDeletingScope::class);
+        return $this->belongsTo(
+            config('financing.models.donation.program', DonationProgram::class),
+            'program_id'
+        )->withTrashed();
     }
 }
