@@ -124,6 +124,7 @@ final class DonationRepository extends AbstractRepository
         return QueryBuilder::for($builder, $request)->allowedFilters([
             AllowedFilter::exact('branch', 'branch_id'),
             AllowedFilter::exact('employee', 'employee_id'),
+            AllowedFilter::exact('donor', 'donor_id'),
             AllowedFilter::exact('status', 'transaction_status'),
             AllowedFilter::exact('donation_type', 'donation_type'),
             AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
