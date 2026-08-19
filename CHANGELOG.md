@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.1 - 2026-08-06
+
+### What's Changed
+
+* refactor: menambahkan beberapa penyesuaian relasi pada model financing by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/34
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.7.0...1.7.1
+
 ## 1.7.0 - 2026-08-06
 
 ### What's Changed

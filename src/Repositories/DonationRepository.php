@@ -16,6 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inisiatif\Package\Common\Abstracts\AbstractRepository;
 use Inisiatif\Distribution\Financings\Models\DonationDetail;
 use Inisiatif\Distribution\Financings\Includes\IncludedProgram;
+use Inisiatif\Distribution\Financings\Filters\DateIntervalFilter;
 use Inisiatif\Distribution\Financings\Scopes\DonationSearchScope;
 use Inisiatif\Distribution\Financings\Includes\IncludedFundingType;
 
@@ -117,9 +118,11 @@ final class DonationRepository extends AbstractRepository
             ->appends((array) $request->query());
     }
 
-    public function queryBuilder(Builder $builder, Request $request, ?string $donationDetailTable = null): QueryBuilder
+    public function queryBuilder(Builder $builder, Request $request, ?string $donationDetailTable = null, ?string $donorTable = null): QueryBuilder
     {
         $donationDetailTable ??= (new DonationDetail)->getTable();
+
+        $donorTable ??= ModelShared::getDonorModel()->getTable();
 
         return QueryBuilder::for($builder, $request)->allowedFilters([
             AllowedFilter::exact('branch', 'branch_id'),
@@ -127,8 +130,10 @@ final class DonationRepository extends AbstractRepository
             AllowedFilter::exact('donor', 'donor_id'),
             AllowedFilter::exact('status', 'transaction_status'),
             AllowedFilter::exact('donation_type', 'donation_type'),
+            AllowedFilter::exact('donor_name', $donorTable.'name'),
             AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
             AllowedFilter::exact('program', $donationDetailTable.'.program_id'),
+            AllowedFilter::custom('transaction_date', new DateIntervalFilter),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),

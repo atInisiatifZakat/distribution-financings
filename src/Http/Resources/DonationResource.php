@@ -29,6 +29,14 @@ final class DonationResource extends JsonResource
             'donor' => new DonorResource(
                 $this->whenLoaded('donor')
             ),
+            'program' => $this->whenLoaded('program', fn () => [
+                'id' => $this->resource->getAttribute('program')?->getAttribute('id'),
+                'name' => $this->resource->getAttribute('program')?->getAttribute('name'),
+            ]),
+            'funding' => $this->whenLoaded('funding_type', fn () => [
+                'id' => $this->resource->getAttribute('funding_type')?->getAttribute('id'),
+                'name' => $this->resource->getAttribute('funding_type')?->getAttribute('name'),
+            ]),
         ];
     }
 }
