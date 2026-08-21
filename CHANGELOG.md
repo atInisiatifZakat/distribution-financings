@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.3 - 2026-08-21
+
+### What's Changed
+
+* refactor: menambahkan penyesuaian upload donasi by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/36
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.7.2...1.7.3
+
 ## 1.7.1 - 2026-08-06
 
 ### What's Changed
