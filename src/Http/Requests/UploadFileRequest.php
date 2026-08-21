@@ -12,6 +12,7 @@ final class UploadFileRequest extends FormRequest
     {
         return [
             'file' => 'required|file',
+            'distribution_id' => 'required|exists:distributions,id',
         ];
     }
 }

@@ -28,94 +28,97 @@ final class DonationRepository extends AbstractRepository
     {
         $branch = $request->user()->getLoginable()->getAttribute('branch');
 
-        $donationTable = ModelShared::getDonationModel()->getTable();
+        $branchId = $request->user()->getLoginable()->getAttribute('branch_id');
 
         $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
 
-        $fundingTypeTable = ModelShared::getFundingTypeModel()->getTable();
-
-        $donationProgramTable = ModelShared::getProgramModel()->getTable();
-
-        $branchTable = ModelRegistrar::getBranchModel()->getTable();
-
-        $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
-
-        $donorTable = ModelShared::getDonorModel()->getTable();
-
         if ($branch && $branch->getAttribute('is_head_office') === false) {
-            $builder = $this->getModel()->newQuery()->select(
-                $donationTable.'.id',
-                $branchTable.'.id AS branch_id',
-                $employeeTable.'.id AS employee_id',
-                $donorTable.'.id AS donor_id',
-                $donationTable.'.identification_number',
-                $donationTable.'.type AS donation_type',
-                $branchTable.'.name AS branch_name',
-                $donorTable.'.name AS donor_name',
-                $donorTable.'.identification_number AS donor_identification_number',
-                $employeeTable.'.name AS employee_name',
-                $donationTable.'.transaction_date',
-                $donationTable.'.transaction_status',
-                $donationTable.'.amount',
-                $donationTable.'.total_amount',
-                $donationDetailTable.'.id AS donation_detail_id',
-                $donationDetailTable.'.funding_type_id',
-                $donationDetailTable.'.program_id', )
-                ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
-                ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
-                ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
-                ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
-                ->where($donationTable.'.branch_id', $request->user()->getLoginable()->getAttribute('branch_id'))
-                ->where($donationTable.'.transaction_status', 'VERIFIED')
-                ->groupBy($branchTable.'.id')
-                ->groupBy($employeeTable.'.id')
-                ->groupBy($donorTable.'.id')
-                ->groupBy($donationTable.'.id')
-                ->groupBy($donationDetailTable.'.id')
-                ->orderBy($donationTable.'.transaction_date', 'desc')
-                ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
-        } elseif ($branch && $branch->getAttribute('is_head_office') === true) {
-            $builder = $this->getModel()->newQuery()->select(
-                $donationTable.'.id',
-                $branchTable.'.id AS branch_id',
-                $employeeTable.'.id AS employee_id',
-                $donorTable.'.id AS donor_id',
-                $donationTable.'.identification_number',
-                $donationTable.'.type AS donation_type',
-                $branchTable.'.name AS branch_name',
-                $donorTable.'.name AS donor_name',
-                $donorTable.'.identification_number AS donor_identification_number',
-                $employeeTable.'.name AS employee_name',
-                $donationTable.'.transaction_date',
-                $donationTable.'.transaction_status',
-                $donationTable.'.amount',
-                $donationTable.'.total_amount',
-                $donationDetailTable.'.id AS donation_detail_id',
-                $donationDetailTable.'.funding_type_id',
-                $donationDetailTable.'.program_id', )
-                ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
-                ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
-                ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
-                ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
-                ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
-                ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
-                ->where($donationTable.'.transaction_status', 'VERIFIED')
-                ->groupBy($branchTable.'.id')
-                ->groupBy($employeeTable.'.id')
-                ->groupBy($donorTable.'.id')
-                ->groupBy($donationTable.'.id')
-                ->groupBy($donationDetailTable.'.id')
-                ->orderBy($donationTable.'.transaction_date', 'desc')
-                ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
+            $builder = $this->newVerifiedDonationQuery(false, $branchId);
+        } else {
+            $builder = $this->newVerifiedDonationQuery(true, null);
         }
+
+        $builder = $builder
+            ->orderBy(ModelShared::getDonationModel()->getTable().'.transaction_date', 'desc')
+            ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
 
         $query = $this->queryBuilder($builder, $request, $donationDetailTable);
 
         return $query
             ->paginate($request->integer('limit', 5))
             ->appends((array) $request->query());
+    }
+
+    public function findVerifiedDetail(
+        string $identificationNumber,
+        int|string $donationDetailId,
+        string $donorIdentificationNumber,
+        bool $isHeadOffice = true,
+        mixed $branchId = null,
+    ): ?Donation {
+        $donationTable = ModelShared::getDonationModel()->getTable();
+
+        $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
+
+        $donorTable = ModelShared::getDonorModel()->getTable();
+
+        /** @var Donation|null $donation */
+        $donation = $this->newVerifiedDonationQuery($isHeadOffice, $branchId)
+            ->where($donationTable.'.identification_number', $identificationNumber)
+            ->where($donationDetailTable.'.id', $donationDetailId)
+            ->where($donorTable.'.identification_number', $donorIdentificationNumber)
+            ->first();
+
+        return $donation;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getMissingVerifiedDetailErrors(
+        string $identificationNumber,
+        int|string $donationDetailId,
+        string $donorIdentificationNumber,
+        bool $isHeadOffice = true,
+        mixed $branchId = null,
+    ): array {
+        $donationTable = ModelShared::getDonationModel()->getTable();
+
+        $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
+
+        $donorTable = ModelShared::getDonorModel()->getTable();
+
+        $errors = [];
+
+        $identificationExists = $this->newVerifiedDonationQuery($isHeadOffice, $branchId)
+            ->where($donationTable.'.identification_number', $identificationNumber)
+            ->exists();
+
+        if ($identificationExists === false) {
+            $errors['identification_number'] = "identification_number {$identificationNumber} does not exist";
+        }
+
+        $donationDetailExists = $this->newVerifiedDonationQuery($isHeadOffice, $branchId)
+            ->where($donationDetailTable.'.id', $donationDetailId)
+            ->exists();
+
+        if ($donationDetailExists === false) {
+            $errors['donation_detail_id'] = "donation_detail_id {$donationDetailId} does not exist";
+        }
+
+        $donorExists = $this->newVerifiedDonationQuery($isHeadOffice, $branchId)
+            ->where($donorTable.'.identification_number', $donorIdentificationNumber)
+            ->exists();
+
+        if ($donorExists === false) {
+            $errors['donor_identification_number'] = "donor_identification_number {$donorIdentificationNumber} does not exist";
+        }
+
+        if ($errors === []) {
+            $errors['file'] = 'identification_number, donation_detail_id, and donor_identification_number do not match';
+        }
+
+        return $errors;
     }
 
     public function queryBuilder(Builder $builder, Request $request, ?string $donationDetailTable = null, ?string $donorTable = null): QueryBuilder
@@ -142,5 +145,60 @@ final class DonationRepository extends AbstractRepository
             AllowedInclude::custom('funding_type', new IncludedFundingType),
             AllowedInclude::custom('program', new IncludedProgram),
         ]);
+    }
+
+    private function newVerifiedDonationQuery(bool $isHeadOffice, mixed $branchId): Builder
+    {
+        $donationTable = ModelShared::getDonationModel()->getTable();
+
+        $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
+
+        $fundingTypeTable = ModelShared::getFundingTypeModel()->getTable();
+
+        $donationProgramTable = ModelShared::getProgramModel()->getTable();
+
+        $branchTable = ModelRegistrar::getBranchModel()->getTable();
+
+        $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
+
+        $donorTable = ModelShared::getDonorModel()->getTable();
+
+        $builder = $this->getModel()->newQuery()->select(
+            $donationTable.'.id',
+            $branchTable.'.id AS branch_id',
+            $employeeTable.'.id AS employee_id',
+            $donorTable.'.id AS donor_id',
+            $donationTable.'.identification_number',
+            $donationTable.'.type AS donation_type',
+            $branchTable.'.name AS branch_name',
+            $donorTable.'.name AS donor_name',
+            $donorTable.'.identification_number AS donor_identification_number',
+            $employeeTable.'.name AS employee_name',
+            $donationTable.'.transaction_date',
+            $donationTable.'.transaction_status',
+            $donationTable.'.amount',
+            $donationTable.'.total_amount',
+            $donationDetailTable.'.id AS donation_detail_id',
+            $donationDetailTable.'.funding_type_id',
+            $donationDetailTable.'.program_id',
+        )
+            ->join($branchTable, $donationTable.'.branch_id', '=', $branchTable.'.id')
+            ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
+            ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
+            ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
+            ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
+            ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
+            ->where($donationTable.'.transaction_status', 'VERIFIED')
+            ->groupBy($branchTable.'.id')
+            ->groupBy($employeeTable.'.id')
+            ->groupBy($donorTable.'.id')
+            ->groupBy($donationTable.'.id')
+            ->groupBy($donationDetailTable.'.id');
+
+        if ($isHeadOffice === false) {
+            $builder->where($donationTable.'.branch_id', $branchId);
+        }
+
+        return $builder;
     }
 }
