@@ -65,4 +65,12 @@ final class Financing extends Model implements ResourceInterface
             'donation_detail_program_id'
         )->withTrashed();
     }
+
+    public function program_sector(): BelongsTo
+    {
+        return $this->belongsTo(
+            config('financing.models.distribution.program_sector', ProgramSector::class),
+            'distribution_sector_id'
+        );
+    }
 }

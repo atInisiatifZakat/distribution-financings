@@ -53,6 +53,7 @@ final class FinancingRepository extends AbstractRepository
             AllowedInclude::relationship('donation'),
             AllowedInclude::relationship('distribution'),
             AllowedInclude::relationship('program'),
+            AllowedInclude::relationship('program_sector'),
             AllowedInclude::relationship('funding_type'),
         ]);
     }
