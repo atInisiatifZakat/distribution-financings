@@ -127,16 +127,18 @@ final class DonationRepository extends AbstractRepository
 
         $donorTable ??= ModelShared::getDonorModel()->getTable();
 
+        $donationTable = ModelShared::getDonationModel()->getTable();
+
         return QueryBuilder::for($builder, $request)->allowedFilters([
-            AllowedFilter::exact('branch', 'branch_id'),
-            AllowedFilter::exact('employee', 'employee_id'),
-            AllowedFilter::exact('donor', 'donor_id'),
-            AllowedFilter::exact('status', 'transaction_status'),
-            AllowedFilter::exact('donation_type', 'donation_type'),
-            AllowedFilter::exact('donor_name', $donorTable.'name'),
-            AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id'),
-            AllowedFilter::exact('program', $donationDetailTable.'.program_id'),
-            AllowedFilter::custom('transaction_date', new DateIntervalFilter),
+            AllowedFilter::exact('branch', 'branch_id')->ignore(null, ''),
+            AllowedFilter::exact('employee', 'employee_id')->ignore(null, ''),
+            AllowedFilter::exact('donor', $donationTable.'.donor_id')->ignore(null, ''),
+            AllowedFilter::exact('status', 'transaction_status')->ignore(null, ''),
+            AllowedFilter::exact('donation_type', 'donation_type')->ignore(null, ''),
+            AllowedFilter::exact('donor_name', $donorTable.'.name')->ignore(null, ''),
+            AllowedFilter::exact('funding_type', $donationDetailTable.'.funding_type_id')->ignore(null, ''),
+            AllowedFilter::exact('program', $donationDetailTable.'.program_id')->ignore(null, ''),
+            AllowedFilter::custom('transaction_date', new DateIntervalFilter, $donationTable.'.transaction_date')->ignore(null, ''),
         ])->allowedIncludes([
             AllowedInclude::relationship('branch'),
             AllowedInclude::relationship('employee'),

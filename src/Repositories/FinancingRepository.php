@@ -30,7 +30,7 @@ final class FinancingRepository extends AbstractRepository
     {
         $builder = $this->getModel()->newQuery()
             ->where('distribution_id', '=', $distributionId)
-            ->with(['donation', 'donation.branch', 'donation.employee', 'donation.donor'])
+            ->with(['donation', 'donation.branch', 'donation.employee', 'donation.donor', 'funding_type', 'program'])
             ->orderBy('created_at', 'desc');
 
         return $this->queryBuilder($builder, $request)
