@@ -55,7 +55,7 @@ final class Donation extends Model implements ResourceInterface
         return $this->hasMany(config('financing.models.donation.detail', DonationDetail::class));
     }
 
-    public function funding(): BelongsTo
+    public function funding_type(): BelongsTo
     {
         return $this->belongsTo(
             config('financing.models.donation.funding_type', DonationFundingType::class),
@@ -88,7 +88,7 @@ final class Donation extends Model implements ResourceInterface
 
     public function calculateAmountRemaining(?string $action = null): int|float
     {
-        $totalFinancingAmount = $this->getAttribute('financing')->sum('amount');
+        $totalFinancingAmount = collect($this->getAttribute('financing'))->sum('amount');
 
         if ($action) {
             $calculate = $this->getAttribute('total_amount') + $totalFinancingAmount;

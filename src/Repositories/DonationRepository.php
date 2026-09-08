@@ -40,6 +40,7 @@ final class DonationRepository extends AbstractRepository
 
         $builder = $builder
             ->orderBy(ModelShared::getDonationModel()->getTable().'.transaction_date', 'desc')
+            ->with(['funding_type:id,name', 'program:id,name'])
             ->withGlobalScope(DonationSearchScope::class, new DonationSearchScope);
 
         $query = $this->queryBuilder($builder, $request, $donationDetailTable);
@@ -155,10 +156,6 @@ final class DonationRepository extends AbstractRepository
 
         $donationDetailTable = ModelShared::getDonationDetailModel()->getTable();
 
-        $fundingTypeTable = ModelShared::getFundingTypeModel()->getTable();
-
-        $donationProgramTable = ModelShared::getProgramModel()->getTable();
-
         $branchTable = ModelRegistrar::getBranchModel()->getTable();
 
         $employeeTable = ModelRegistrar::getEmployeeModel()->getTable();
@@ -188,8 +185,6 @@ final class DonationRepository extends AbstractRepository
             ->join($donorTable, $donationTable.'.donor_id', '=', $donorTable.'.id')
             ->join($employeeTable, $donationTable.'.employee_id', '=', $employeeTable.'.id')
             ->join($donationDetailTable, $donationTable.'.id', '=', $donationDetailTable.'.donation_id')
-            ->leftJoin($fundingTypeTable.' as funding', $donationDetailTable.'.funding_type_id', '=', 'funding.id')
-            ->leftJoin($donationProgramTable.' as program', $donationDetailTable.'.program_id', '=', 'program.id')
             ->where($donationTable.'.transaction_status', 'VERIFIED')
             ->groupBy($branchTable.'.id')
             ->groupBy($employeeTable.'.id')
