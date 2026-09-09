@@ -24,7 +24,7 @@ final class UploadFinancingController
         StoreModelUploadFile $uploadFile,
         ValidateUploadFinancingAction $validate,
     ): JsonResource {
-        try{
+        try {
             $loginable = $request->user()->getLoginable();
 
             $branch = $loginable?->getAttribute('branch');
@@ -44,7 +44,7 @@ final class UploadFinancingController
                     'is_head_office' => $isHeadOffice,
                 ]),
             );
-            
+
             return JsonResource::make([
                 'status' => 'success',
                 'message' => 'Financing was imported',
