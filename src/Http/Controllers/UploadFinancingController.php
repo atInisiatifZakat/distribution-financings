@@ -24,29 +24,37 @@ final class UploadFinancingController
         StoreModelUploadFile $uploadFile,
         ValidateUploadFinancingAction $validate,
     ): JsonResource {
-        $loginable = $request->user()->getLoginable();
+        try{
+            $loginable = $request->user()->getLoginable();
 
-        $branch = $loginable?->getAttribute('branch');
+            $branch = $loginable?->getAttribute('branch');
 
-        $isHeadOffice = $branch?->getAttribute('is_head_office') === true;
+            $isHeadOffice = $branch?->getAttribute('is_head_office') === true;
 
-        $branchId = $loginable?->getAttribute('branch_id');
+            $branchId = $loginable?->getAttribute('branch_id');
 
-        $validate->handle($request->file('file'), $isHeadOffice, $branchId);
+            $validate->handle($request->file('file'), $isHeadOffice, $branchId);
 
-        $uploadFile->handle(
-            $request->user(),
-            $request->file('file'),
-            Financing::class,
-            array_merge($request->except('file'), [
-                'branch_id' => $branchId,
-                'is_head_office' => $isHeadOffice,
-            ]),
-        );
+            $uploadFile->handle(
+                $request->user(),
+                $request->file('file'),
+                Financing::class,
+                array_merge($request->except('file'), [
+                    'branch_id' => $branchId,
+                    'is_head_office' => $isHeadOffice,
+                ]),
+            );
+            
+            return JsonResource::make([
+                'status' => 'success',
+                'message' => 'Financing was imported',
+            ]);
+        } catch (\Throwable $e) {
+            return JsonResource::make([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
 
-        return JsonResource::make([
-            'status' => 'success',
-            'message' => 'Financing was imported',
-        ]);
     }
 }
