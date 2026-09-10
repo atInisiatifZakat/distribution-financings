@@ -47,10 +47,16 @@ final class FinancingProcessor implements ModelUploadRecordProcessor
             throw CannotProcessRecord::make('Program not found');
         }
 
-        $isOverAmount = $distribution->isOverRequestAmount((float) $record->getPayloadData('amount'));
+        $amount = (float) $record->getPayloadData('amount');
+
+        $isOverAmount = $distribution->isOverRequestAmount($amount);
 
         if ($isOverAmount) {
             throw CannotProcessRecord::make('Amount must be the same as distribution amount');
+        }
+
+        if ($donation->isOverAmount($amount)) {
+            throw CannotProcessRecord::make('Total financing amount exceeds donation amount');
         }
 
         $financing = Financing::query()->create([

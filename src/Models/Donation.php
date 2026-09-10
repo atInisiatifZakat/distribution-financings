@@ -99,6 +99,11 @@ final class Donation extends Model implements ResourceInterface
         return $calculate;
     }
 
+    public function isOverAmount(float|int $requestAmount): bool
+    {
+        return ($requestAmount + $this->financing()->sum('amount')) > (float) $this->getAttribute('total_amount');
+    }
+
     public function checkAmountRemaining(): int|float
     {
         return $this->calculateAmountRemaining();

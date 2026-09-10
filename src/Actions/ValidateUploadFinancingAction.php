@@ -18,6 +18,8 @@ final class ValidateUploadFinancingAction
     {
         $errors = [];
 
+        $uploadedAmounts = [];
+
         foreach ($this->readRows($file) as $index => $row) {
             $line = $index + 2;
 
@@ -62,6 +64,14 @@ final class ValidateUploadFinancingAction
             );
 
             if ($donation !== null) {
+                $amount = (float) $this->value($row, ['amount']);
+                $donationId = (string) $donation->getKey();
+                $uploadedAmounts[$donationId] = ($uploadedAmounts[$donationId] ?? 0) + $amount;
+
+                if ($donation->isOverAmount($uploadedAmounts[$donationId])) {
+                    $errors['amount'][] = "Row {$line}: total financing amount exceeds donation amount for identification_number {$identificationNumber}";
+                }
+
                 continue;
             }
 
