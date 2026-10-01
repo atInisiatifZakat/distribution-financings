@@ -6,6 +6,7 @@ namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
 use FromHome\ModelUpload\ModelUpload;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\ValidationException;
 use FromHome\ModelUpload\Actions\StoreModelUploadFile;
 use Inisiatif\Distribution\Financings\Models\Financing;
 use Inisiatif\Distribution\Financings\Http\Requests\UploadFileRequest;
@@ -33,7 +34,12 @@ final class UploadFinancingController
 
             $branchId = $loginable?->getAttribute('branch_id');
 
-            $validate->handle($request->file('file'), $isHeadOffice, $branchId);
+            $validate->handle(
+                $request->file('file'),
+                $isHeadOffice,
+                $branchId,
+                $request->input('distribution_id'),
+            );
 
             $uploadFile->handle(
                 $request->user(),
@@ -50,9 +56,13 @@ final class UploadFinancingController
                 'message' => 'Financing was imported',
             ]);
         } catch (\Throwable $e) {
+            $message = $e instanceof ValidationException
+                ? ($e->validator->errors()->first() ?: $e->getMessage())
+                : $e->getMessage();
+
             return JsonResource::make([
                 'status' => 'error',
-                'message' => $e->getMessage(),
+                'message' => $message,
             ]);
         }
 
