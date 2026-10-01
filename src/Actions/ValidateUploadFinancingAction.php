@@ -94,9 +94,9 @@ final class ValidateUploadFinancingAction
         $distribution = Distribution::query()->find($distributionId);
 
         if ($distribution === null) {
-            $errors['distribution_id'][] = 'Distribution not found';
+            $errors['distribution_id'][] = 'Pengajuan tidak ditemukan';
         } elseif ($distribution->isOverRequestAmount($totalCsvAmount)) {
-            $errors['amount'][] = 'Total financing amount exceeds distribution amount';
+            $errors['amount'][] = 'Total nominal yang diupload lebih besar dari nominal donasi';
         }
 
         if ($errors !== []) {
