@@ -74,7 +74,7 @@ final class ValidateUploadFinancingAction
                 $uploadedAmounts[$donationId] = ($uploadedAmounts[$donationId] ?? 0) + $amount;
 
                 if ($donation->isOverAmount($uploadedAmounts[$donationId])) {
-                    $errors['amount'][] = "Row {$line}: total financing amount exceeds donation amount for identification_number {$identificationNumber}";
+                    $errors['amount'][] = "Row {$line}: total nominal yang diupload lebih besar dari nominal donasi untuk ID Donasi {$identificationNumber}";
                 }
 
                 continue;
