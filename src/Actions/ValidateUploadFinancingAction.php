@@ -6,6 +6,7 @@ namespace Inisiatif\Distribution\Financings\Actions;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
+use Inisiatif\Distribution\Financings\Models\Distribution;
 use Inisiatif\Distribution\Financings\Repositories\DonationRepository;
 
 final class ValidateUploadFinancingAction
@@ -14,11 +15,13 @@ final class ValidateUploadFinancingAction
         private readonly DonationRepository $donationRepository,
     ) {}
 
-    public function handle(UploadedFile $file, bool $isHeadOffice, mixed $branchId): void
+    public function handle(UploadedFile $file, bool $isHeadOffice, mixed $branchId, mixed $distributionId): void
     {
         $errors = [];
 
         $uploadedAmounts = [];
+
+        $totalCsvAmount = 0.0;
 
         foreach ($this->readRows($file) as $index => $row) {
             $line = $index + 2;
@@ -38,6 +41,9 @@ final class ValidateUploadFinancingAction
             if ($identificationNumber === null && ($donationDetailId === null || $donationDetailId === '') && $donorIdentificationNumber === null) {
                 continue;
             }
+
+            $amount = (float) $this->value($row, ['amount']);
+            $totalCsvAmount += $amount;
 
             if ($identificationNumber === null) {
                 $errors['identification_number'][] = "Row {$line}: identification_number is required";
@@ -64,12 +70,11 @@ final class ValidateUploadFinancingAction
             );
 
             if ($donation !== null) {
-                $amount = (float) $this->value($row, ['amount']);
                 $donationId = (string) $donation->getKey();
                 $uploadedAmounts[$donationId] = ($uploadedAmounts[$donationId] ?? 0) + $amount;
 
                 if ($donation->isOverAmount($uploadedAmounts[$donationId])) {
-                    $errors['amount'][] = "Row {$line}: total financing amount exceeds donation amount for identification_number {$identificationNumber}";
+                    $errors['amount'][] = "Row {$line}: total nominal yang diupload lebih besar dari nominal donasi untuk ID Donasi {$identificationNumber}";
                 }
 
                 continue;
@@ -84,6 +89,14 @@ final class ValidateUploadFinancingAction
             ) as $field => $message) {
                 $errors[$field][] = "Row {$line}: {$message}";
             }
+        }
+
+        $distribution = Distribution::query()->find($distributionId);
+
+        if ($distribution === null) {
+            $errors['distribution_id'][] = 'Pengajuan tidak ditemukan';
+        } elseif ($distribution->isOverRequestAmount($totalCsvAmount)) {
+            $errors['amount'][] = 'Total nominal yang diupload lebih besar dari nominal donasi';
         }
 
         if ($errors !== []) {
