@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.9 - 2026-10-02
+
+### What's Changed
+
+* refactor: menambahkan pengecekkan total nominal pada saat upload donasi by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/42
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.7.8...1.7.9
+
 ## 1.7.8 - 2026-09-10
 
 ### What's Changed
