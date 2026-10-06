@@ -13,6 +13,7 @@ final class ValidateUploadFinancingAction
 {
     public function __construct(
         private readonly DonationRepository $donationRepository,
+        private readonly ReplacePreviousFinancingUploadAction $replacePreviousUpload,
     ) {}
 
     public function handle(UploadedFile $file, bool $isHeadOffice, mixed $branchId, mixed $distributionId): void
@@ -22,6 +23,12 @@ final class ValidateUploadFinancingAction
         $uploadedAmounts = [];
 
         $totalCsvAmount = 0.0;
+
+        $distributionId = (string) $distributionId;
+
+        $replacedDistributionAmount = $this->replacePreviousUpload->amountForDistribution($distributionId);
+
+        $replacedDonationAmounts = $this->replacePreviousUpload->amountsByDonationId($distributionId);
 
         foreach ($this->readRows($file) as $index => $row) {
             $line = $index + 2;
@@ -73,7 +80,11 @@ final class ValidateUploadFinancingAction
                 $donationId = (string) $donation->getKey();
                 $uploadedAmounts[$donationId] = ($uploadedAmounts[$donationId] ?? 0) + $amount;
 
-                if ($donation->isOverAmount($uploadedAmounts[$donationId])) {
+                $replacedDonationAmount = (float) ($replacedDonationAmounts[$donationId] ?? 0);
+
+                $usedDonationAmount = (float) $donation->financing()->sum('amount') - $replacedDonationAmount;
+
+                if (($uploadedAmounts[$donationId] + max($usedDonationAmount, 0)) > (float) $donation->getAttribute('total_amount')) {
                     $errors['amount'][] = "Row {$line}: total nominal yang diupload lebih besar dari nominal donasi untuk ID Donasi {$identificationNumber}";
                 }
 
@@ -95,8 +106,12 @@ final class ValidateUploadFinancingAction
 
         if ($distribution === null) {
             $errors['distribution_id'][] = 'Pengajuan tidak ditemukan';
-        } elseif ($distribution->isOverRequestAmount($totalCsvAmount)) {
-            $errors['amount'][] = 'Total nominal yang diupload lebih besar dari nominal donasi';
+        } else {
+            $usedDistributionAmount = (float) $distribution->financing()->sum('amount') - $replacedDistributionAmount;
+
+            if (($totalCsvAmount + max($usedDistributionAmount, 0)) > (float) $distribution->getAttribute('amount')) {
+                $errors['amount'][] = 'Nominal yang diupload melebihi nominal donasi. Total nominal yang diupload sebesar ' . number_format($totalCsvAmount, 0, ',', '.');
+            }
         }
 
         if ($errors !== []) {
