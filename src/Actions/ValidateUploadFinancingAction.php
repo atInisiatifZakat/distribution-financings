@@ -155,7 +155,9 @@ final class ValidateUploadFinancingAction
                 continue;
             }
 
-            $rows[] = \array_combine($headers, \array_pad($data, \count($headers), null)) ?: [];
+            $values = \array_slice(\array_pad($data, \count($headers), null), 0, \count($headers));
+
+            $rows[] = \array_combine($headers, $values) ?: [];
         }
 
         \fclose($handle);
