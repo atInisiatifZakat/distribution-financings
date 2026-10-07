@@ -2,6 +2,14 @@
 
 All notable changes to `distribution-financings` will be documented in this file.
 
+## 1.7.11 - 2026-10-07
+
+### What's Changed
+
+* fix: error upload action by @nadiannisaqilah in https://github.com/atInisiatifZakat/distribution-financings/pull/44
+
+**Full Changelog**: https://github.com/atInisiatifZakat/distribution-financings/compare/1.7.10...1.7.11
+
 ## 1.7.10 - 2026-10-07
 
 ### What's Changed
