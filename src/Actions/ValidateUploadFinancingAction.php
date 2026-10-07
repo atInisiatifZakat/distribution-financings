@@ -110,7 +110,7 @@ final class ValidateUploadFinancingAction
             $usedDistributionAmount = (float) $distribution->financing()->sum('amount') - $replacedDistributionAmount;
 
             if (($totalCsvAmount + max($usedDistributionAmount, 0)) > (float) $distribution->getAttribute('amount')) {
-                $errors['amount'][] = 'Nominal yang diupload melebihi nominal donasi. Total nominal yang diupload sebesar ' . number_format($totalCsvAmount, 0, ',', '.');
+                $errors['amount'][] = 'Nominal yang diupload melebihi nominal donasi. Total nominal yang diupload sebesar '.number_format($totalCsvAmount, 0, ',', '.');
             }
         }
 
@@ -155,7 +155,9 @@ final class ValidateUploadFinancingAction
                 continue;
             }
 
-            $rows[] = \array_combine($headers, \array_pad($data, \count($headers), null)) ?: [];
+            $values = \array_slice(\array_pad($data, \count($headers), null), 0, \count($headers));
+
+            $rows[] = \array_combine($headers, $values) ?: [];
         }
 
         \fclose($handle);
