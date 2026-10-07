@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inisiatif\Distribution\Financings\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use FromHome\ModelUpload\ModelUpload;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -12,6 +13,7 @@ use Inisiatif\Distribution\Financings\Models\Financing;
 use Inisiatif\Distribution\Financings\Http\Requests\UploadFileRequest;
 use Inisiatif\Distribution\Financings\Actions\ValidateUploadFinancingAction;
 use Inisiatif\Distribution\Financings\ModelUploads\ImportFinancingModelUpload;
+use Inisiatif\Distribution\Financings\Actions\ReplacePreviousFinancingUploadAction;
 
 final class UploadFinancingController
 {
@@ -24,7 +26,8 @@ final class UploadFinancingController
         UploadFileRequest $request,
         StoreModelUploadFile $uploadFile,
         ValidateUploadFinancingAction $validate,
-    ): JsonResource {
+        ReplacePreviousFinancingUploadAction $replacePreviousUpload,
+    ): JsonResponse {
         try {
             $loginable = $request->user()->getLoginable();
 
@@ -41,6 +44,8 @@ final class UploadFinancingController
                 $request->input('distribution_id'),
             );
 
+            $replacePreviousUpload->handle((string) $request->input('distribution_id'));
+
             $uploadFile->handle(
                 $request->user(),
                 $request->file('file'),
@@ -54,17 +59,15 @@ final class UploadFinancingController
             return JsonResource::make([
                 'status' => 'success',
                 'message' => 'Financing was imported',
-            ]);
-        } catch (\Throwable $e) {
-            $message = $e instanceof ValidationException
-                ? ($e->validator->errors()->first() ?: $e->getMessage())
-                : $e->getMessage();
+            ])->response();
+        } catch (ValidationException $exception) {
+            $message = $exception->validator->errors()->first() ?: $exception->getMessage();
 
-            return JsonResource::make([
+            return response()->json([
                 'status' => 'error',
                 'message' => $message,
-            ]);
+                'errors' => $exception->errors(),
+            ], 422);
         }
-
     }
 }
