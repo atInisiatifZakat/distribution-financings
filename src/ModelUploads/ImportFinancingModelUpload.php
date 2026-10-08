@@ -34,8 +34,14 @@ final class ImportFinancingModelUpload extends AbstractModelRecordImport impleme
 
     public function getCsvSettings(): array
     {
+        $delimiter = $this->meta['csv_delimiter'] ?? ';';
+
+        if (! \is_string($delimiter) || $delimiter === '') {
+            $delimiter = ';';
+        }
+
         return [
-            'delimiter' => ';',
+            'delimiter' => $delimiter,
             'enclosure' => '"',
             'input_encoding' => 'UTF-8',
         ];

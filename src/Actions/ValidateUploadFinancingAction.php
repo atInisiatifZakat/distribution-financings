@@ -7,6 +7,7 @@ namespace Inisiatif\Distribution\Financings\Actions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
 use Inisiatif\Distribution\Financings\Models\Distribution;
+use Inisiatif\Distribution\Financings\Support\CsvDelimiter;
 use Inisiatif\Distribution\Financings\Repositories\DonationRepository;
 
 final class ValidateUploadFinancingAction
@@ -23,6 +24,8 @@ final class ValidateUploadFinancingAction
         $uploadedAmounts = [];
 
         $totalCsvAmount = 0.0;
+
+        $parsedRowCount = 0;
 
         $distributionId = (string) $distributionId;
 
@@ -48,6 +51,8 @@ final class ValidateUploadFinancingAction
             if ($identificationNumber === null && ($donationDetailId === null || $donationDetailId === '') && $donorIdentificationNumber === null) {
                 continue;
             }
+
+            $parsedRowCount++;
 
             $amount = (float) $this->value($row, ['amount']);
             $totalCsvAmount += $amount;
@@ -102,6 +107,10 @@ final class ValidateUploadFinancingAction
             }
         }
 
+        if ($parsedRowCount === 0) {
+            $errors['file'][] = 'File CSV tidak dapat dibaca. Pastikan kolom transaction_id, donation_detail_id, donor_number, dan amount tersedia.';
+        }
+
         $distribution = Distribution::query()->find($distributionId);
 
         if ($distribution === null) {
@@ -110,7 +119,7 @@ final class ValidateUploadFinancingAction
             $usedDistributionAmount = (float) $distribution->financing()->sum('amount') - $replacedDistributionAmount;
 
             if (($totalCsvAmount + max($usedDistributionAmount, 0)) > (float) $distribution->getAttribute('amount')) {
-                $errors['amount'][] = 'Nominal yang diupload melebihi nominal donasi. Total nominal yang diupload sebesar '.number_format($totalCsvAmount, 0, ',', '.');
+                $errors['distribution_amount'][] = 'Nominal yang diupload melebihi nominal donasi. Total nominal yang diupload sebesar '.number_format($totalCsvAmount, 0, ',', '.');
             }
         }
 
@@ -132,7 +141,10 @@ final class ValidateUploadFinancingAction
             ]);
         }
 
-        $header = \fgetcsv($handle, 0, ';');
+        $delimiter = CsvDelimiter::fromLine((string) \fgets($handle));
+        \rewind($handle);
+
+        $header = \fgetcsv($handle, 0, $delimiter);
 
         if ($header === false) {
             \fclose($handle);
@@ -150,7 +162,7 @@ final class ValidateUploadFinancingAction
 
         $rows = [];
 
-        while (($data = \fgetcsv($handle, 0, ';')) !== false) {
+        while (($data = \fgetcsv($handle, 0, $delimiter)) !== false) {
             if ($this->isEmptyRow($data)) {
                 continue;
             }
